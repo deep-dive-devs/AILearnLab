@@ -26,6 +26,11 @@ const SideBar = () => {
       url: "/practice",
     },
     { icon: <FaUser />, item: "Profile", url: "/profile" },
+    {
+      icon: <HiOutlineDesktopComputer />,
+      item: "dbTest",
+      url: "/dbTest",
+    },
   ];
   return (
     <div className=" bg-backgroundSecondary flex flex-col w-1/3 h-full min-h-screen items-start py-10 pl-2 pr-4 relative">
