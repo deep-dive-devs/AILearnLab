@@ -1,6 +1,7 @@
 "use client";
 import { auth } from "@/app/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import CustomInput from "../shared/customInput";
@@ -33,8 +34,6 @@ const RegisterForm = () => {
     // Assuming registerData includes emailAddress, password, and displayName
     const { emailAddress, password, displayName } = registerData;
 
-    
-    
     createUserWithEmailAndPassword(auth, emailAddress, password)
       //Using firebase to create user auth, email, and password.
       .then((authUser) => {
@@ -105,6 +104,9 @@ const RegisterForm = () => {
         >
           Signup
         </button>
+        <div>
+          Already have an account? <Link href={"/auth/login"}>Login</Link>{" "}
+        </div>
       </form>
     </div>
   );

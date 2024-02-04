@@ -1,6 +1,7 @@
 "use client";
 import { auth } from "@/app/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import CustomInput from "../shared/customInput";
@@ -32,8 +33,6 @@ const LoginForm = () => {
     // Assuming loginData includes emailAddress and password
     const { emailAddress, password } = loginData;
 
-    
-    
     signInWithEmailAndPassword(auth, emailAddress, password)
       //Using firebase to login user auth, email, and password.
       .then((authUser) => {
@@ -84,6 +83,9 @@ const LoginForm = () => {
         >
           SignIn
         </button>
+        <div>
+          Do not have an account? <Link href={"/auth/register"}>Sign up</Link>{" "}
+        </div>
       </form>
     </div>
   );
