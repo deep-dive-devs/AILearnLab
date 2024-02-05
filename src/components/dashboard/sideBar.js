@@ -5,18 +5,30 @@ import { FaHome, FaUser } from "react-icons/fa";
 import { HiOutlineDesktopComputer } from "react-icons/hi";
 import { CiLogout } from "react-icons/ci";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { auth } from "@/app/firebase";
 
 const SideBar = () => {
   const path = usePathname();
-  
+  const route = useRouter();
   const activeLink = (url) => {
     if (path === url) {
       return "bg-primary !text-white";
     } else {
       return "";
     }
+  };
+  const handleLogOut = () => {
+    //when logout button is clicked, it will sign user out and redirect to login page.
+    signOut(auth)
+      .then(() => {
+        console.log("logged out");
+        route.push("/auth/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   const sideBarLinks = [
     { icon: <FaHome size={22} />, item: "Home", url: "/" },
@@ -51,7 +63,10 @@ const SideBar = () => {
           ))}
         </div>
 
-        <div className="flex flex-row items-center justify center gap-2 absolute bottom-10">
+        <div
+          className="flex flex-row items-center justify center cursor-pointer gap-2 absolute bottom-10"
+          onClick={handleLogOut}
+        >
           <div>
             <CiLogout />
           </div>
