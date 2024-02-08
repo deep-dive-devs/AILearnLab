@@ -1,7 +1,12 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import CustomInput from "../../../components/shared/customInput";
+import { useAuth } from "@/components/context/AuthContext";
 
 const Profile = () => {
+  const { user, loading, users } = useAuth();
+  console.log(user);
+  console.log(users);
   return (
     <div className="bg-backgroundTertiary w-full min-h-[80vh] h-full mx-3 p-5 rounded-lg">
       <div className="m-3">Search</div>
@@ -29,12 +34,6 @@ const Profile = () => {
         </div>
         <div className="bg-backgroundSecondary w-full h-full min-h-[40vh] rounded-xl p-4">
           <h2>Account Information</h2>
-          {/* <h3>Name</h3>
-          <p>Gina</p>
-          <h3>Name</h3>
-          <p>Gina</p> <h3>Name</h3>
-          <p>Gina</p> <h3>Name</h3>
-          <p>Gina</p> */}
         </div>
       </div>
     </div>

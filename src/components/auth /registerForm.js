@@ -3,8 +3,10 @@ import { auth } from "@/app/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { db } from "@/app/firebase";
 import React, { useState } from "react";
 import CustomInput from "../shared/customInput";
+import { addDoc, collection } from "firebase/firestore";
 const RegisterForm = () => {
   //uses state to handle form changes
   const [registerData, setRegisterData] = useState({
@@ -47,6 +49,15 @@ const RegisterForm = () => {
           })
             .then(() => {
               console.log("User display name updated successfully.");
+              addDoc(collection(db, "authUsers"), {
+                email: emailAddress,
+                displayName: displayName,
+                friends: [],
+              })
+                .then((docRef) => {
+                  console.log("Document written with ID: ", docRef.id);
+                })
+                .catch((e) => {});
             })
             .catch((error) => {
               console.error("Error updating user display name:", error);
@@ -54,7 +65,7 @@ const RegisterForm = () => {
         }
 
         console.log("Success. The user is created in Firebase");
-        router.push("/auth/login");
+        // router.push("/auth/login");
       })
       .catch((error) => {
         console.log(error.message);
