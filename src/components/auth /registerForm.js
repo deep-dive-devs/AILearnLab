@@ -52,6 +52,7 @@ const RegisterForm = () => {
               addDoc(collection(db, "authUsers"), {
                 email: emailAddress,
                 displayName: displayName,
+                uid: authUser.user.uid,
                 friends: [],
               })
                 .then((docRef) => {
