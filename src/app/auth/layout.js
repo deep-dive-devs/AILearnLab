@@ -7,6 +7,7 @@ import { auth } from "../firebase";
 import { useRouter } from "next/navigation";
 
 export default function AuthLayout({ children }) {
+ 
   //loader by default is true and will return false if there is no user
   const [loading, setLoading] = useState(true);
   const route = useRouter();
@@ -28,18 +29,15 @@ export default function AuthLayout({ children }) {
     return <p>Loading...</p>;
   }
   return (
-    <section className="w-full px-5 h-full min-h-screen bg-backgroundPrimary">
-      <AuthNavbar />
-      <div className="flex items-center justify-center w-full gap-10">
-        {children}
-        <Image
-          className="hidden md:block"
-          src={"/robotteacher.png"}
-          alt="aibot"
-          width={400}
-          height={400}
+    <section className="w-full px-5 h-full flex flex-col md:flex-row items-center gap-10 justify-center min-h-screen bg-backgroundPrimary">
+      <Image
+        className=""
+        src={"/AI-101.png"}
+        alt="aibot"
+        width={400}
+        height={400}
         />
-      </div>
+        {children}
     </section>
   );
 }

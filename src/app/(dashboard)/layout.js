@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Header from "../../components/dashboard/header";
 import SideBar from "../../components/dashboard/sideBar";
 import { auth } from "../firebase";
+import { AuthProvider } from "@/components/context/AuthContext";
 
 export default function DashboardLayout({ children }) {
   //loader by default is true and will return false if there is a user
@@ -35,13 +36,15 @@ export default function DashboardLayout({ children }) {
   }
   return (
     <section className="w-full h-full bg-backgroundPrimary">
-      <div className="flex w-full h-full">
-        <SideBar />
-        <div className="w-full h-full">
-          <Header />
-          {children}
+      <AuthProvider>
+        <div className="flex w-full h-full">
+          <SideBar />
+          <div className="w-full h-full">
+            <Header />
+            {children}
+          </div>
         </div>
-      </div>
+      </AuthProvider>
     </section>
   );
 }
