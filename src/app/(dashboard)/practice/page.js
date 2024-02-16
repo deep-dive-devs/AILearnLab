@@ -12,10 +12,11 @@ const Practice = ({ onGenerateResponse }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userInput }),
+        body: JSON.stringify({ message:`teach me ${userInput}, please break it down into approachable lessons and in a JSON format simlir to {"Lesson #":{"Topic":,"what to study":}} do not include text before or after the JSON object` 
+        }),
       });
       const responseData = await response.json();
-      setResponse(responseData.response)
+      setResponse(JSON.parse(responseData.response))
     } catch (error) {
       console.error('Error generating OpenAI response:', error);
     }
@@ -26,9 +27,9 @@ const Practice = ({ onGenerateResponse }) => {
       <textarea
         value={userInput}
         onChange={(e) => setUserInput(e.target.value)}
-        placeholder="Enter your message..."
+        placeholder="What would you like to learn about today?"
       />
-      <button onClick={handleGenerateResponse}>Generate Response</button>
+      <button onClick={handleGenerateResponse}>Get My Lesson!</button>
       {response && <div>{response}</div>} 
     </div>
   );
