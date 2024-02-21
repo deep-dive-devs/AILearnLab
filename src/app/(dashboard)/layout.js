@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }) {
       <AuthProvider>
         <div className="flex w-full h-full">
           <SideBar />
-          <div className="w-full h-full">
+          <div className="w-full h-screen flex flex-col overflow-scroll">
             <Header />
             {children}
           </div>
