@@ -18,6 +18,8 @@ module.exports = {
         backgroundSecondary: "#fff",
         buttonColor: "#091B50",
         backgroundTertiary: "#f3cab6",
+        popupBackground:"#808080",
+        popupText:"#E6CCCC"
       },
     },
   },
