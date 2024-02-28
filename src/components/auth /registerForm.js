@@ -53,6 +53,7 @@ const RegisterForm = () => {
                 email: emailAddress,
                 displayName: displayName,
                 uid: authUser.user.uid,
+                showPopup:true,
                 friends: [],
               })
                 .then((docRef) => {
