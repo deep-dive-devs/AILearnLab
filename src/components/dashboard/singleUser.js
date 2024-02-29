@@ -8,6 +8,7 @@ import {
   deleteDoc,
   arrayUnion,
   updateDoc,
+  doc,
 } from "firebase/firestore";
 import { db } from "@/app/firebase";
 
@@ -21,20 +22,9 @@ const SingleUser = ({ singleUser, handleAddFriend }) => {
   useEffect(() => {
     const checkFriendRequest = async () => {
       try {
-        const userQ = query(
-          collection(db, "authUsers"),
-          where("uid", "==", user.uid)
-        );
-        const userQuerySnapshot = await getDocs(userQ);
-        const userDocRef = userQuerySnapshot.docs[0].ref;
+        const singleUserDocRef = doc(db, "authUsers", singleUser.uid);
 
-        const singleUserQ = query(
-          collection(db, "authUsers"),
-          where("uid", "==", singleUser.uid)
-        );
-        const singleUserQuerySnapshot = await getDocs(singleUserQ);
-        const singleUserDocRef = singleUserQuerySnapshot.docs[0].ref;
-
+        const userDocRef = doc(db, "authUsers", user.uid);
         const sentFriendRequestQuery = query(
           collection(db, "friendRequests"),
           where("senderID", "==", userDocRef),
@@ -77,47 +67,19 @@ const SingleUser = ({ singleUser, handleAddFriend }) => {
 
   const handleAcceptRequest = async () => {
     try {
-      // Query to find the document reference of the friend using the friend's ID
-      const friendQ = query(
-        collection(db, "authUsers"),
-        where("uid", "==", singleUser.uid)
-      );
+      const friendDocRef = doc(db, "authUsers", singleUser.uid);
+      const userDocRef = doc(db, "authUsers", user.uid);
+      // Update the authenticated user's document to add the friend's reference to the friends array
+      await updateDoc(userDocRef, {
+        friends: arrayUnion(friendDocRef),
+      });
 
-      // Execute the friend query
-      const friendQuerySnapshot = await getDocs(friendQ);
-
-      // Get the document reference of the friend
-      const friendDocRef = friendQuerySnapshot.docs[0].ref;
-
-      // Query to find the document reference of the user using the user's ID
-      const userQ = query(
-        collection(db, "authUsers"),
-        where("uid", "==", user.uid)
-      );
-
-      // Execute the user query
-      const userQuerySnapshot = await getDocs(userQ);
-
-      // Check if any documents were found
-      if (!userQuerySnapshot.empty) {
-        // Reference to the authenticated user's document
-        const userDocRef = userQuerySnapshot.docs[0].ref;
-
-        // Update the authenticated user's document to add the friend's reference to the friends array
-        await updateDoc(userDocRef, {
-          friends: arrayUnion(friendDocRef),
-        });
-
-        // Update the friend's document to add the user's reference to their friends array
-        await updateDoc(friendDocRef, {
-          friends: arrayUnion(userDocRef),
-        });
-        await deleteDoc(ifReceived);
-        updateData();
-        console.log("Friend request accepted!");
-      } else {
-        console.error("User document not found");
-      }
+      // Update the friend's document to add the user's reference to their friends array
+      await updateDoc(friendDocRef, {
+        friends: arrayUnion(userDocRef),
+      });
+      await deleteDoc(ifReceived);
+      updateData();
     } catch (error) {
       console.error("Error accepting friend request:", error.message);
     }
