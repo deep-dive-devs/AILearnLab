@@ -81,7 +81,7 @@ const LoginForm = () => {
           className="bg-buttonColor mt-2 rounded-lg hover:scale-105 hover:shadow-lg w-full py-2 text-white"
           type="submit"
         >
-          SignIn
+          Sign In
         </button>
         <div>
           Do not have an account? <Link href={"/auth/register"}>Sign up</Link>{" "}

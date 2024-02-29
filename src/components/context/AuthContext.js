@@ -1,9 +1,10 @@
 // AuthContext.js
+"use client";
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, getDoc } from "firebase/firestore";
-import { auth,db } from "@/app/firebase";
- // assuming you have Firebase initialized
+import { auth, db } from "@/app/firebase";
+// assuming you have Firebase initialized
 
 // Create a context for user authentication
 const AuthContext = createContext();
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
-
+  const [isUpdated, setIsUpdated] = useState(false);
   useEffect(() => {
     const getUsers = async () => {
       const usersCollection = collection(db, "authUsers");
@@ -50,10 +51,12 @@ export const AuthProvider = ({ children }) => {
     });
 
     return () => unsubscribe();
-  }, []);
-
+  }, [isUpdated]);
+  const updateData = () => {
+    setIsUpdated(!isUpdated);
+  };
   return (
-    <AuthContext.Provider value={{ user, loading, users }}>
+    <AuthContext.Provider value={{ user, loading, users, updateData }}>
       {children}
     </AuthContext.Provider>
   );
