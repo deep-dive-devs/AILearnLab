@@ -1,11 +1,16 @@
 "use client"
 import { useState } from 'react';
 import dummyData from "./dummy"
+import { auth,db } from "@/app/firebase";
+import { doc, setDoc } from "firebase/firestore"; 
 
 const Practice = ({ onGenerateResponse }) => {
   const [userInput, setUserInput] = useState('');
+  const [inputTitle, setInputTitle] = useState('');
   const [response, setResponse] = useState('')
-
+  
+  const user = auth.currentUser.uid
+  const userRef = doc(db,"authUsers",user)
   const handleGenerateResponse = async () => {
     setResponse(dummyData)
     // try {
@@ -25,19 +30,9 @@ const Practice = ({ onGenerateResponse }) => {
     console.log(response)
   };
 
-  const getResponse = (response) => {
-    if (!response) return <div>Use the box below to type in the subject you want to learn about!!</div>
-
-    for (const key in response) {
-      
-    }
-    return (
-      <div>I'm working over here!</div>
-    )
-  }
-
   const saveLesson = () => {
     console.log("saving lesson, click")
+    setDoc(userRef,{goals:{[inputTitle ]: response}},{merge:true})
   }
 
   return (
@@ -56,6 +51,12 @@ const Practice = ({ onGenerateResponse }) => {
       </div>
       <textarea
         className='rounded-md mb-4'
+        value={inputTitle}
+        onChange={(e) => setInputTitle(e.target.value)}
+        placeholder="Give your lesson a title"
+      />
+      <textarea
+        className='rounded-md mb-4'
         value={userInput}
         onChange={(e) => setUserInput(e.target.value)}
         placeholder="What would you like to learn about today?"
@@ -65,12 +66,12 @@ const Practice = ({ onGenerateResponse }) => {
           <button 
             onClick={handleGenerateResponse} 
             className="p-2 mx-auto bg-primary rounded-md text-white text-lg font-medium">
-              Get A New Lesson!
+              New Lesson
           </button>
           <button 
             onClick={saveLesson} 
-            className="p-2 mx-auto bg-primary rounded-md text-white text-lg font-medium">
-              Save to you Lessons!
+            className="p-2 px-10 mx-auto bg-primary rounded-md text-white text-lg font-medium">
+              Save
           </button>
         </div>
           :<button 

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { db } from "@/app/firebase";
 import React, { useState } from "react";
 import CustomInput from "../shared/customInput";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection,setDoc,doc } from "firebase/firestore";
 const RegisterForm = () => {
   //uses state to handle form changes
   const [registerData, setRegisterData] = useState({
@@ -49,7 +49,7 @@ const RegisterForm = () => {
           })
             .then(() => {
               console.log("User display name updated successfully.");
-              addDoc(collection(db, "authUsers"), {
+              setDoc(doc(db, "authUsers",authUser.user.uid), {
                 email: emailAddress,
                 displayName: displayName,
                 uid: authUser.user.uid,
