@@ -2,17 +2,13 @@
 import React, { useEffect, useState } from "react";
 
 import { useAuth } from "@/components/context/AuthContext";
-import { FaTrash } from "react-icons/fa";
 import {
   addDoc,
   arrayRemove,
   collection,
-  deleteDoc,
   doc,
-  getDocs,
-  query,
   updateDoc,
-  where,
+
 } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import UsersPopup from "./usersPopup";
@@ -63,48 +59,22 @@ const MainPage = () => {
   const handleUnfriend = async (friendId) => {
     try {
       setRemovingFriendId(friendId);
-      // Query to find the document reference of the friend using the friend's ID
-      const friendQ = query(
-        collection(db, "authUsers"),
-        where("uid", "==", friendId)
+      const friendDocRef = doc(db, "authUsers", friendId);
+      const userDocRef = doc(db, "authUsers", user.uid);
+      // Update the authenticated user's document to remove the friend's reference from the friends array
+      await updateDoc(userDocRef, {
+        friends: arrayRemove(friendDocRef),
+      });
+      await updateDoc(friendDocRef, {
+        friends: arrayRemove(userDocRef),
+      });
+      setFriends((prevFriends) =>
+        prevFriends.filter((friend) => friend.uid !== friendId)
       );
 
-      // Execute the friend query
-      const friendQuerySnapshot = await getDocs(friendQ);
+      console.log("Friend removed successfully");
+      updateData();
 
-      // Get the document reference of the friend
-      const friendDocRef = friendQuerySnapshot.docs[0].ref;
-
-      // Query to find the document reference of the user using the user's ID
-      const userQ = query(
-        collection(db, "authUsers"),
-        where("uid", "==", user.uid)
-      );
-
-      // Execute the user query
-      const userQuerySnapshot = await getDocs(userQ);
-
-      // Check if any documents were found
-      if (!userQuerySnapshot.empty) {
-        // Reference to the authenticated user's document
-        const userDocRef = userQuerySnapshot.docs[0].ref;
-
-        // Update the authenticated user's document to remove the friend's reference from the friends array
-        await updateDoc(userDocRef, {
-          friends: arrayRemove(friendDocRef),
-        });
-        await updateDoc(friendDocRef, {
-          friends: arrayRemove(userDocRef),
-        });
-        setFriends((prevFriends) =>
-          prevFriends.filter((friend) => friend.uid !== friendId)
-        );
-
-        console.log("Friend removed successfully");
-        updateData();
-      } else {
-        console.error("User document not found");
-      }
       setRemovingFriendId(null);
     } catch (error) {
       setRemovingFriendId(null);
@@ -112,39 +82,18 @@ const MainPage = () => {
       console.error("Error removing friend:", error.message);
     }
   };
-  console.log(users);
+
   const handleAddFriend = async (receiverID) => {
     try {
-      const friendQ = query(
-        collection(db, "authUsers"),
-        where("uid", "==", receiverID)
-      );
+      const friendDocRef = doc(db, "authUsers", receiverID);
 
-      // Execute the friend query
-      const friendQuerySnapshot = await getDocs(friendQ);
-
-      // Get the document reference of the friend
-      const friendDocRef = friendQuerySnapshot.docs[0].ref;
-
-      // Query to find the document reference of the user using the user's ID
-      const userQ = query(
-        collection(db, "authUsers"),
-        where("uid", "==", user.uid)
-      );
-
-      // Execute the user query
-      const userQuerySnapshot = await getDocs(userQ);
-
-      // Check if any documents were found
-
-      // Reference to the authenticated user's document
-      const userDocRef = userQuerySnapshot.docs[0].ref;
+      const userDocRef = doc(db, "authUsers", user.uid);
 
       await addDoc(collection(db, "friendRequests"), {
         senderID: userDocRef,
         receiverID: friendDocRef,
       });
-      console.log("Friend request sent successfully.");
+     
     } catch (error) {
       console.error("Error sending friend request:", error);
     }
