@@ -5,13 +5,13 @@ import { auth,db } from "@/app/firebase";
 import { doc, setDoc } from "firebase/firestore"; 
 import TitleNotification from './titleNotification';
 
-const Practice = (userId) => {
+const Practice = ({userId, user}) => {
   const [showTitleNotification, setShowTitleNotification] = useState(false);
   const [userInput, setUserInput] = useState('');
   const [inputTitle, setInputTitle] = useState('');
   const [response, setResponse] = useState('')
   
-  const userRef = doc(db,"authUsers",userId.user)
+  const userRef = doc(db,"authUsers",userId)
   const handleGenerateResponse = async () => {
     setResponse(dummyData)
     // try {
