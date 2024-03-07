@@ -5,7 +5,7 @@ import { auth,db } from "@/app/firebase";
 import { doc, setDoc } from "firebase/firestore"; 
 import TitleNotification from './titleNotification';
 
-const Practice = ({userId, user}) => {
+const Practice = ({userId, user, setUserData}) => {
   const [showTitleNotification, setShowTitleNotification] = useState(false);
   const [userInput, setUserInput] = useState('');
   const [inputTitle, setInputTitle] = useState('');
@@ -35,6 +35,13 @@ const Practice = ({userId, user}) => {
     if (!inputTitle) {
       setShowTitleNotification(true);
     } else {
+      let currData = user.goals
+
+      currData ={...currData,[inputTitle ]: response}
+      setUserData(((prevUserData) => ({
+        ...prevUserData,
+        goals:currData ,
+      })))
       setDoc(userRef,{goals:{[inputTitle ]: response}},{merge:true})
       clearInputs()
     }
@@ -67,13 +74,13 @@ const Practice = ({userId, user}) => {
         </div>
       </div>
       <textarea
-        className='rounded-md mb-4'
+        className='rounded-md mb-4 px-2 pt-2'
         value={inputTitle}
         onChange={(e) => setInputTitle(e.target.value)}
         placeholder="Give your lesson a title"
       />
       <textarea
-        className='rounded-md mb-4'
+        className='rounded-md mb-4 px-2 pt-2'
         value={userInput}
         onChange={(e) => setUserInput(e.target.value)}
         placeholder="What would you like to learn about today?"
