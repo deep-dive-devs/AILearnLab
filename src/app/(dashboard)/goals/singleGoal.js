@@ -15,8 +15,14 @@ const SingleGoal = ({title, lessons}) => {
                 .sort((a, b) => a[0].split(" ")[1] - +b[0].split(" ")[1] )
                 .map(([key, value], index) => 
                 (
-                    <Link href="/practice/singlePractice">
-                        <div key={key} className='p-2 my-1 border-t border-black w-70 hover:bg-gray-200'>
+                    <Link key={key} href={{ pathname: '/singlePractice', 
+                                            query: { title: title, 
+                                                     lessonTitle: key,  
+                                                     lesson: JSON.stringify(value),
+                                                     lessons: JSON.stringify(lessons)
+                                                     } 
+                                        }}>
+                        <div className='p-2 my-1 border-t border-black w-70 hover:bg-gray-200'>
                             <div className='p-2 text-xl'>{key}</div>
                             <div className='px-2 mb-1'>{lessons[key]["Topic"]}</div>
                             <div className='px-2 '>{lessons[key]["What to study"]}</div>
