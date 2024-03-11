@@ -11,7 +11,6 @@ const Practice = () => {
     lessonTitle:searchParams.get('lessonTitle'),
     lesson:parsedLesson
     })
-  console.log(parsedLessons)
 
   const getLesson = (direction) => {
     let lessonTitle = +lesson.lessonTitle.split(" ")[1]
