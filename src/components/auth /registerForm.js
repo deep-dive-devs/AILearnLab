@@ -55,6 +55,7 @@ const RegisterForm = () => {
                 uid: authUser.user.uid,
                 showPopup:true,
                 friends: [],
+                goals:{},
               })
                 .then((docRef) => {
                   console.log("Document written with ID: ", docRef.id);
