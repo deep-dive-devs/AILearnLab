@@ -37,10 +37,10 @@ const Practice = () => {
 
 
   return (
-    <div className='flex flex-col p-1 mx-auto'>
+    <div className='flex flex-col mx-auto'>
          <div className="flex justify-between mb-4">
-            <button className="p-2 mx-auto bg-primary rounded-md text-white text-lg font-medium" onClick={() => getLesson("last")}>Previous Lesson</button>
-            <button className="p-2 mx-auto bg-primary rounded-md text-white text-lg font-medium" onClick={() => getLesson("next")}>Next Lesson</button>
+            <button className="p-2 bg-primary rounded-md text-white text-lg font-medium" onClick={() => getLesson("last")}>Previous Lesson</button>
+            <button className="p-2 bg-primary rounded-md text-white text-lg font-medium" onClick={() => getLesson("next")}>Next Lesson</button>
         </div>
         <div className="flex flex-col p-4 mx-auto bg-white rounded-md">
             <div className="text-3xl font-bold text-center my-4 border-b-2 border-gray-500 pb-2">{lesson.title}</div>
