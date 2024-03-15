@@ -26,6 +26,7 @@ const Goals = () => {
   };
   
   const deleteGoal = async (goalName) => {
+    try {
     let currData = userData.goals
 
     delete currData[goalName]
@@ -33,7 +34,11 @@ const Goals = () => {
       ...prevUserData,
       goals: { ...currData },
     })))
-    setDoc(docRef,{goals:{...currData}},{merge:true})
+    console.log(userData)
+    setDoc(docRef,{...userData})
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
   }
 
   useEffect(() => {
@@ -52,7 +57,7 @@ const Goals = () => {
           </div>
         </div>
       </div>
-      {userData && <AllGoals key={userId} userData={userData}/>}
+      {userData && <AllGoals key={userId} userData={userData} deleteGoal={deleteGoal}/>}
     </div>
   );
 };
