@@ -46,7 +46,7 @@ const Goals = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-11/12 mx-auto">
+    <div className="flex flex-col px-4">
       <div className="flex justify-between flex-grow mb-2">
         <div className="w-3/5">
           <CreateGoal userId={userId} user={userData} setUserData={setUserData}/>

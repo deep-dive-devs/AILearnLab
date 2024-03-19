@@ -15,7 +15,7 @@ const AllGoals = ({userData, deleteGoal}) => {
               <div className="p-2 text-2xl font-bold">{key}</div>
               <button className="p-1 mt-2 bg-primary rounded-md text-white text-lg font-medium" onClick={() => deleteGoal(key)}>Remove</button>
             </div>
-            <SingleGoal title={key} lessons={value}/>
+            <SingleGoal title={key} lessons={value} uid={userData.uid}/>
           </div>
         ))}
     </div>
