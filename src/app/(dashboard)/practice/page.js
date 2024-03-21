@@ -6,7 +6,7 @@ const Practice = ({lesson}) => {
   
 
   return (
-    <div className="flex flex-col p-4 flex-grow bg-slate-400 rounded-md">
+    <div className="flex flex-col px-4">
       <AllGoals />
     </div>
   );

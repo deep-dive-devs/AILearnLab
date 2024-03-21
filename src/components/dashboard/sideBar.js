@@ -1,15 +1,19 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaHome, FaUser } from "react-icons/fa";
 import { HiOutlineDesktopComputer } from "react-icons/hi";
 import { CiLogout } from "react-icons/ci";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
-import { auth } from "@/app/firebase";
+import { db, auth } from "@/app/firebase";
+import { doc, getDoc, setDoc} from "firebase/firestore";
 
 const SideBar = () => {
+  const [userData, setUserData] = useState("");
+  const userId = auth.currentUser.uid
+  const docRef = doc(db,"authUsers",userId);
   const path = usePathname();
   const route = useRouter();
   const activeLink = (url) => {
@@ -40,10 +44,31 @@ const SideBar = () => {
     {
       icon: <HiOutlineDesktopComputer />,
       item: "Practice",
-      url: "/practice",
+      url: { pathname: '/practice', 
+              query: { userData: JSON.stringify(userData) } 
+            },
     },
     { icon: <FaUser />, item: "Profile", url: "/profile" },
   ];
+
+  const fetchUserData = async () => {
+    try {
+      const docSnapshot = await getDoc(docRef);
+
+      if (docSnapshot.exists()) {
+        setUserData(docSnapshot.data());
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   return (
     <div className=" bg-backgroundSecondary flex flex-col w-1/3 h-full min-h-screen items-start py-10 pl-2 pr-4 relative">
       <Image src={"/AI-101.png"} alt="logo" width={250} height={250} />

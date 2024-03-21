@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from 'react';
 import Link from "next/link";
 
-const SingleGoal = ({title, lessons, uid,userData}) => {
+const SingleGoal = ({title, lessons, uid}) => {
     const [open, setOpen] = useState(false)
 
     return (
