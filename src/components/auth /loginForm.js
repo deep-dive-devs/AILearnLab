@@ -61,6 +61,7 @@ const LoginForm = () => {
           type="email"
           placeholder="Enter your Email"
           name="emailAddress"
+          value={loginData.emailAddress}
           label="Email Address"
           handleChange={handleChange}
         />
@@ -68,6 +69,7 @@ const LoginForm = () => {
           type="password"
           placeholder="Enter your Password"
           name="password"
+          value={loginData.password}
           label="Password"
           handleChange={handleChange}
         />

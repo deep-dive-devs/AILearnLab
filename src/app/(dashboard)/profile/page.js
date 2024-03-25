@@ -1,16 +1,216 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CustomInput from "../../../components/shared/customInput";
-
+import { toast } from "sonner";
+import { auth, db } from "@/app/firebase";
+import {
+  AuthCredential,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+  updateProfile,
+} from "firebase/auth";
+import { useAuth } from "@/components/context/AuthContext";
+import {
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 
 const Profile = () => {
- 
+  const [userDataForm, setUserDataForm] = useState({
+    displayName: "",
+    location: "",
+  });
+  const [passwordForm, setPasswordForm] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [errorPassword, setErrorPassword] = useState(null);
+  const [changeFormUserData, setChangeFormUserData] = useState(false);
+  const [changePassword, setChangePassword] = useState(false);
+  const [error, setError] = useState(null);
+  const { user, loading, users, updateData } = useAuth();
+  console.log(user);
+  useEffect(() => {
+    const getUser = () => {
+      if (!user || !users) return null;
+      const authenticatedUser = users.find((u) => u.uid === user.uid);
+
+      return authenticatedUser;
+    };
+    const popUser = getUser();
+    console.log(popUser);
+    setUserDataForm({
+      displayName: popUser?.displayName,
+      location: popUser?.location || "",
+    });
+  }, [user, users]);
+
+  const handleChange = (e) => {
+    //Use e to retrive name and value of input field and then proceed to update register data
+    const { name, value } = e.target;
+    setUserDataForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    setChangeFormUserData(true);
+  };
+
+  const handleSecondFormChange = (e) => {
+    //Use e to retrive name and value of input field and then proceed to update register data
+    const { name, value } = e.target;
+    setPasswordForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    setChangePassword(true);
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setErrorPassword(null);
+    setChangePassword(false);
+
+    try {
+      const { oldPassword, newPassword, confirmPassword } = passwordForm;
+      if (newPassword !== confirmPassword) {
+        setErrorPassword("Passwords do not match");
+        return;
+      }
+      if (oldPassword === confirmPassword) {
+        setErrorPassword("You cannot use the Old passwrod Again");
+        return;
+      }
+      // Re-authenticate user for security (you may need to implement this part)
+      const recentUser = auth.currentUser;
+     const credential = EmailAuthProvider.credential(
+       user.email,
+       oldPassword
+     );  await reauthenticateWithCredential(recentUser, credential);
+      // Change password
+      await updatePassword(recentUser, newPassword);
+      toast.success("Password Changed Successfully");
+    } catch (error) {
+      console.log(error);
+      setErrorPassword(error.message);
+    }
+  };
+  const handleUserData = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setChangeFormUserData(false);
+    try {
+      const { displayName, location } = userDataForm;
+      if (!displayName) {
+        setError("Name is required");
+        return;
+      }
+
+      const userQ = query(
+        collection(db, "authUsers"),
+        where("uid", "==", user.uid)
+      );
+
+      // Execute the user query
+      const userQuerySnapshot = await getDocs(userQ);
+
+      // Update the user document
+      if (!userQuerySnapshot.empty) {
+        const userDocRef = userQuerySnapshot.docs[0].ref;
+        await updateProfile(user, {
+          displayName: displayName,
+        });
+        await updateDoc(userDocRef, {
+          displayName: displayName,
+          location: location,
+        });
+      } else {
+        toast.error("User document not found");
+      }
+      toast.success("User Info Updated Successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Error updating user info: " + error.message);
+
+      setError(error.message);
+    }
+  };
   return (
     <div className="bg-backgroundTertiary w-full min-h-[80vh] h-full mx-3 p-5 rounded-lg">
       <div className="m-3">Search</div>
-   
-
-</div>
-
-  )}
+      <div className="flex justify-center items-center gap-5">
+        <div className="w-[60%] bg-white p-10 rounded-2xl ">
+          <h2 className="text-2xl font-bold">User Profile</h2>
+          <form onSubmit={handleUserData}>
+            <CustomInput
+              name={"displayName"}
+              label={"Name:"}
+              handleChange={handleChange}
+              type="text"
+              placeholder="Enter your Name"
+              value={userDataForm.displayName}
+            />
+            <CustomInput
+              name={"location"}
+              label={"Location:"}
+              handleChange={handleChange}
+              type="text"
+              placeholder="Enter your Location"
+              value={userDataForm.location}
+            />
+            {error && <p className="text-red-600">{error}</p>}
+            <button
+              className="bg-buttonColor mt-2 rounded-lg hover:scale-105 hover:shadow-lg w-full py-2 text-white"
+              type="submit"
+              disabled={!changeFormUserData}
+            >
+              Save
+            </button>
+          </form>
+        </div>
+        <div className="w-[37%] bg-white p-10 rounded-2xl">
+          <h2 className="text-xl font-bold">Account Information</h2>
+          <form onSubmit={handleChangePassword}>
+            <CustomInput
+              name={"oldPassword"}
+              label={"Old Password:"}
+              handleChange={handleSecondFormChange}
+              type="password"
+              placeholder="Enter your Old Passwrod"
+              value={passwordForm.oldPassword}
+            />
+            <CustomInput
+              name={"newPassword"}
+              label={"New Password:"}
+              handleChange={handleSecondFormChange}
+              type="password"
+              placeholder="Enter your New Passwrod"
+              value={passwordForm.newPassword}
+            />
+            <CustomInput
+              name={"confirmPassword"}
+              label={"Confirm Password:"}
+              handleChange={handleSecondFormChange}
+              type="password"
+              placeholder="Enter your Password Again"
+              value={passwordForm.confirmPassword}
+            />
+            {errorPassword && <p className="text-red-600">{errorPassword}</p>}
+            <button
+              className="bg-buttonColor mt-2 rounded-lg hover:scale-105 hover:shadow-lg w-full py-2 text-white"
+              type="submit"
+              disabled={!changePassword}
+            >
+              Save
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
 export default Profile;
