@@ -89,6 +89,7 @@ const RegisterForm = () => {
         <CustomInput
           type="text"
           placeholder="Enter your Name"
+          value={registerData.displayName}
           name="displayName"
           label="Name"
           handleChange={handleChange}
@@ -97,6 +98,7 @@ const RegisterForm = () => {
           type="email"
           placeholder="Enter your Email"
           name="emailAddress"
+          value={registerData.emailAddress}
           label="Email Address"
           handleChange={handleChange}
         />
@@ -104,6 +106,7 @@ const RegisterForm = () => {
           type="password"
           placeholder="Enter your Password"
           name="password"
+          value={registerData.password}
           label="Password"
           handleChange={handleChange}
         />

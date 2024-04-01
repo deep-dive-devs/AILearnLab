@@ -1,6 +1,6 @@
 import React from "react";
 
-const CustomInput = ({ name, placeholder, label, type, handleChange }) => {
+const CustomInput = ({ name,value, placeholder, label, type, handleChange }) => {
   return (
     <div className="my-3">
       <label htmlFor={name}>{label}</label>
@@ -9,6 +9,7 @@ const CustomInput = ({ name, placeholder, label, type, handleChange }) => {
         placeholder={placeholder}
         name={name}
         id={name}
+        value={value||''}
         onChange={handleChange}
         className="block w-full border border-[#d9d9d9] rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-base text-sm font-medium p-2"
       />
