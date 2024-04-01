@@ -11,20 +11,6 @@ const Goals = () => {
   const [userData, setUserData] = useState(searchParams.get('userData'))
   const userId = auth.currentUser.uid
   const docRef = doc(db,"authUsers",userId);
-
-  // const fetchUserData = async () => {
-  //   try {
-  //     const docSnapshot = await getDoc(docRef);
-
-  //     if (docSnapshot.exists()) {
-  //       setUserData(docSnapshot.data());
-  //     } else {
-  //       console.log("No such document!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching user data:", error);
-  //   }
-  // };
   
   const deleteGoal = async (goalName) => {
     try {
@@ -35,16 +21,12 @@ const Goals = () => {
       ...prevUserData,
       goals: { ...currData },
     })))
-    console.log(userData)
+    //console.log(userData)
     setDoc(docRef,{...userData})
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   }
-
-  // useEffect(() => {
-  //   fetchUserData();
-  // }, []);
 
   return (
     <div className="flex flex-col px-4">

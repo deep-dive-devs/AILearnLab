@@ -39,13 +39,15 @@ const SideBar = () => {
     {
       icon: <HiOutlineDesktopComputer />,
       item: "Goals",
-      url: "/goals",
+      url: { pathname: '/goals', 
+             query: { userData: JSON.stringify(userData) } 
+            },
     },
     {
       icon: <HiOutlineDesktopComputer />,
       item: "Practice",
       url: { pathname: '/practice', 
-              query: { userData: JSON.stringify(userData) } 
+             query: { userData: JSON.stringify(userData) } 
             },
     },
     { icon: <FaUser />, item: "Profile", url: "/profile" },
