@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from 'react';
 import Link from "next/link";
 
-const SingleGoal = ({title, lessons}) => {
+const SingleGoal = ({title, lessons, uid}) => {
     const [open, setOpen] = useState(false)
 
     return (
@@ -19,7 +19,8 @@ const SingleGoal = ({title, lessons}) => {
                                             query: { title: title, 
                                                      lessonTitle: key,  
                                                      lesson: JSON.stringify(value),
-                                                     lessons: JSON.stringify(lessons)
+                                                     lessons: JSON.stringify(lessons),
+                                                     uid:uid,
                                                      } 
                                         }}>
                         <div className='p-2 my-1 border-t border-black w-70 hover:bg-gray-200'>

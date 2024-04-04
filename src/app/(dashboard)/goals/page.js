@@ -3,27 +3,14 @@ import React, { useEffect, useState } from "react";
 import { db, auth } from "@/app/firebase";
 import { doc, getDoc, setDoc} from "firebase/firestore";
 import CreateGoal from "./createGoal";
-import SingleGoal from "./singleGoal";
 import AllGoals from "./allGoals";
+import { useSearchParams } from 'next/navigation'
 
 const Goals = () => {
-  const [userData, setUserData] = useState("");
+  const searchParams = useSearchParams()
+  const [userData, setUserData] = useState(searchParams.get('userData'))
   const userId = auth.currentUser.uid
   const docRef = doc(db,"authUsers",userId);
-
-  const fetchUserData = async () => {
-    try {
-      const docSnapshot = await getDoc(docRef);
-
-      if (docSnapshot.exists()) {
-        setUserData(docSnapshot.data());
-      } else {
-        console.log("No such document!");
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
   
   const deleteGoal = async (goalName) => {
     try {
@@ -34,19 +21,15 @@ const Goals = () => {
       ...prevUserData,
       goals: { ...currData },
     })))
-    console.log(userData)
+    //console.log(userData)
     setDoc(docRef,{...userData})
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   }
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
   return (
-    <div className="flex flex-col w-11/12 mx-auto">
+    <div className="flex flex-col px-4">
       <div className="flex justify-between flex-grow mb-2">
         <div className="w-3/5">
           <CreateGoal userId={userId} user={userData} setUserData={setUserData}/>

@@ -13,14 +13,14 @@ const CreateGoal = ({userId, user, setUserData}) => {
   
   const userRef = doc(db,"authUsers",userId)
   const handleGenerateResponse = async () => {
-    // setResponse(dummyData) 
+    //setResponse(dummyData)
     try {
       const response = await fetch('/api/openai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message:`teach me ${userInput}, please break it down into approachable lessons and in a JSON format simlir to {"Lesson #":{"Topic":,"what to study":}} do not include text before or after the JSON object` 
+        body: JSON.stringify({ message:`teach me ${userInput}, please break it down into approachable lessons and in a JSON format simlir to {"Lesson #":{"Topic":,"what to study":}}, 'What to study' should be detailed, do not include text before or after the JSON object` 
         }),
       });
       const responseData = await response.json();
@@ -28,7 +28,6 @@ const CreateGoal = ({userId, user, setUserData}) => {
     } catch (error) {
       console.error('Error generating OpenAI response:', error);
     }
-    console.log(response)
   };
 
   const saveLesson = () => {
