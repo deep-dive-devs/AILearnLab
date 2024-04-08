@@ -6,6 +6,7 @@ import { doc, getDoc, updateDoc} from "firebase/firestore";
 import SaveNotification from './saveNotification';
 
 const Practice = () => {
+  header = "Practice"
   const [showSaveNotification, setShowSaveNotification] = useState(false);
   const searchParams = useSearchParams()
   const userId = searchParams.get('uid') ? searchParams.get('uid') : null;
@@ -65,6 +66,9 @@ const Practice = () => {
 
   return (
     <div className='flex flex-col px-4 flex-grow'>
+      <div className="flex justify-between bg-white p-8 rounded-xl mb-2">
+        <h1 className="font-extrabold text-primary text-6xl">{header}</h1>
+      </div>
       {showSaveNotification ? (
         <SaveNotification isOpen={showSaveNotification} onClose={() => setShowSaveNotification(false)} />
         ) : (

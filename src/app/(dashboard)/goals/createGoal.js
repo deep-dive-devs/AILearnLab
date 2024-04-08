@@ -59,7 +59,7 @@ const CreateGoal = ({userId, user, setUserData}) => {
   ) : (
     <>
       <div className='text-4xl mx-auto font-extrabold'>
-        Create Goal
+        Create
       </div>
       <div className="min-w-3/4 h-4/5 bg-white mb-2 rounded-md flex-grow">
         <div className='flex flex-col grow-0 max-h-4/5'>

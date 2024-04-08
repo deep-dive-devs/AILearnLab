@@ -27,6 +27,7 @@ import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
 const Profile = () => {
+  const header =  window.location.pathname.split("/").slice(1)[0][0].toUpperCase()+window.location.pathname.slice(2)
   const [userDataForm, setUserDataForm] = useState({
     displayName: "",
     location: "",
@@ -158,7 +159,11 @@ const Profile = () => {
   };
   console.log(userDataForm);
   return (
-    <div className="bg-backgroundTertiary w-full min-h-[80vh] h-full mx-3 p-5 rounded-lg">
+    <>
+    <div className="flex justify-between bg-white p-8 rounded-xl mb-2 mx-3">
+        <h1 className="font-extrabold text-primary text-6xl">{header}</h1>
+      </div>
+    <div className="bg-backgroundTertiary flex flex-col min-h-[80vh] h-full mx-3 p-5 rounded-lg">
       <div className="m-3">Search</div>
       <div className="flex justify-center items-center gap-5">
         <div className="w-[60%] bg-white p-10 rounded-2xl ">
@@ -270,6 +275,7 @@ const Profile = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 export default Profile;

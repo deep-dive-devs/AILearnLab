@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 const AllGoals = ({userData, deleteGoal}) => {
   const searchParams = useSearchParams()
   const [parsedUserData, setParsedUserData] = useState(searchParams.get('userData') ? JSON.parse(searchParams.get('userData')) : userData)
-  console.log(parsedUserData.goals, "this is all goals")
+  
   return (
     <div className="flex flex-col w-full mx-auto  bg-slate-400 rounded-md">
       <div className='text-3xl mx-auto p-2 font-extrabold'>
