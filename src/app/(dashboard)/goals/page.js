@@ -7,7 +7,6 @@ import AllGoals from "./allGoals";
 import { useSearchParams } from 'next/navigation'
 
 const Goals = () => {
-  const header =  window.location.pathname.split("/").slice(1)[0][0].toUpperCase()+window.location.pathname.slice(2)
   const searchParams = useSearchParams()
   const [userData, setUserData] = useState(searchParams.get('userData'))
   const userId = auth.currentUser.uid
@@ -31,9 +30,6 @@ const Goals = () => {
 
   return (
     <div className="flex flex-col px-4">
-      <div className="flex justify-between bg-white p-8 rounded-xl mb-2">
-        <h1 className="font-extrabold text-primary text-6xl">{header}</h1>
-      </div>
       <div className="flex justify-between flex-grow mb-2">
         <div className="w-3/5">
           <CreateGoal userId={userId} user={userData} setUserData={setUserData}/>

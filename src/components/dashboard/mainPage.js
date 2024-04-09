@@ -104,9 +104,6 @@ const MainPage = () => {
   };
   return (
     <div>
-      <div className="flex justify-between bg-white p-8 rounded-xl mb-2 mx-3">
-              <h1 className="font-extrabold text-primary text-6xl">Welcome</h1>
-            </div>
       <div>{user.email}</div>
       <div className="flex">
         <div className="w-1/2"></div>
