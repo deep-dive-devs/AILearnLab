@@ -8,10 +8,10 @@ import {
   collection,
   doc,
   updateDoc,
-
 } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import UsersPopup from "./usersPopup";
+import Image from "next/image";
 const MainPage = () => {
   const { user, loading, users, updateData } = useAuth();
 
@@ -93,7 +93,6 @@ const MainPage = () => {
         senderID: userDocRef,
         receiverID: friendDocRef,
       });
-     
     } catch (error) {
       console.error("Error sending friend request:", error);
     }
@@ -103,40 +102,61 @@ const MainPage = () => {
     setShowPopup(!showPopup);
   };
   return (
-    <div>
-      <div>{user.email}</div>
-      <div className="flex">
-        <div className="w-1/2"></div>
-        <div className="bg-backgroundSecondary w-1/2 h-full min-h-[40vh] rounded-xl p-4">
-          <div className="flex justify-between">
-            <h2>Friends</h2>
-            <button
-              onClick={handleTogglePopup}
-              className="bg-buttonColor mt-2 rounded-lg hover:scale-105 hover:shadow-lg py-2 px-4 text-white"
-            >
-              Add more
-            </button>
-            {showPopup && (
-              <UsersPopup
-                handleTogglePopup={handleTogglePopup}
-                notFriends={notFriends}
-                handleAddFriend={handleAddFriend}
-              />
-            )}
-          </div>
-          {friends.map((friend, index) => (
-            <div key={index} className="flex items-center gap-4">
-              <div>{friend.displayName}</div>
-              <button
-                disabled={removingFriendId === friend.uid}
-                className="cursor-pointer bg-red-600 px-3 py-1 rounded-full text-white"
-                onClick={() => handleUnfriend(friend.uid)}
-              >
-                {removingFriendId === friend.uid ? "Removing..." : "Remove"}
-              </button>
+    <div className="flex h-full w-full gap-4 px-10">
+      <div className="w-2/3 flex h-fit gap-4">
+        <div className="w-1/2 bg-[#1976D2] rounded-lg p-4 text-white space-y-4 shadow-xl">
+          <div className="flex gap-4 items-center ">
+            <div>
+              <Image src={"/flag.png"} alt="flag" width={50} height={50} />
             </div>
-          ))}
+            <h2 className="text-4xl">12</h2>
+          </div>
+          <p className="text-sm">Total lessons started this Month</p>
         </div>
+        <div className="w-1/2 bg-[#2EB46B] rounded-lg p-4 text-white space-y-4 shadow-xl">
+          <div className="flex gap-4 items-center ">
+            <div>
+              <Image
+                src={"/checkmark.png"}
+                alt="checkmark"
+                width={50}
+                height={50}
+              />
+            </div>
+            <h2 className="text-4xl">02</h2>
+          </div>
+          <p className="text-sm">Total lessons completed this Month</p>
+        </div>
+      </div>
+      <div className="bg-backgroundSecondary w-1/3 h-full min-h-[40vh] rounded-xl p-4">
+        <div className="flex justify-between">
+          <h2>Friends</h2>
+          <button
+            onClick={handleTogglePopup}
+            className="bg-buttonColor mt-2 rounded-lg hover:scale-105 hover:shadow-lg py-2 px-4 text-white"
+          >
+            Add more
+          </button>
+          {showPopup && (
+            <UsersPopup
+              handleTogglePopup={handleTogglePopup}
+              notFriends={notFriends}
+              handleAddFriend={handleAddFriend}
+            />
+          )}
+        </div>
+        {friends.map((friend, index) => (
+          <div key={index} className="flex items-center gap-4">
+            <div>{friend.displayName}</div>
+            <button
+              disabled={removingFriendId === friend.uid}
+              className="cursor-pointer bg-red-600 px-3 py-1 rounded-full text-white"
+              onClick={() => handleUnfriend(friend.uid)}
+            >
+              {removingFriendId === friend.uid ? "Removing..." : "Remove"}
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

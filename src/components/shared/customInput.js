@@ -2,8 +2,8 @@ import React from "react";
 
 const CustomInput = ({ name,value, placeholder, label, type, handleChange }) => {
   return (
-    <div className="my-3">
-      <label htmlFor={name}>{label}</label>
+    <div className="my-3 w-full">
+      <label className="text-base" htmlFor={name}>{label}</label>
       <input
         type={type}
         placeholder={placeholder}

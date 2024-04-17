@@ -72,7 +72,7 @@ const StartingPopup = ({ handleSetPopup, handleClose }) => {
         </p>
         <button
           onClick={handleAccept}
-          className="bg-buttonColor mt-20 rounded-lg hover:scale-105 hover:shadow-lg px-5 py-2"
+          className="bg-buttonColor mt-20 text-lg rounded-lg hover:scale-105 hover:shadow-lg px-10 py-4"
         >
           Next
         </button>

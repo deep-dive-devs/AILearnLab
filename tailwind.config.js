@@ -16,9 +16,9 @@ module.exports = {
         primary: "#091B50",
         backgroundPrimary: "#FFF3E4",
         backgroundSecondary: "#fff",
-        buttonColor: "#091B50",
+        buttonColor: "#1A3781",
         backgroundTertiary: "#f3cab6",
-        popupBackground:"#808080",
+        popupBackground:"#1A1A32",
         popupText:"#E6CCCC"
       },
     },
