@@ -24,7 +24,11 @@ const Practice = () => {
 
   const getLesson = (direction) => {
     let lessonTitle = +lesson.lessonTitle.split(" ")[1];
-    const nextLesson = lessonTitle < 10 ? `Lesson ${lessonTitle + 1}` : null;
+
+    const nextLesson =
+      lessonTitle < Object.keys(parsedLessons).length
+        ? `Lesson ${lessonTitle + 1}`
+        : null;
     const lastLesson = lessonTitle > 1 ? `Lesson ${lessonTitle - 1}` : null;
 
     if (direction === "last") {
@@ -83,18 +87,23 @@ const Practice = () => {
       ) : (
         <>
           <div className="flex justify-between mb-4 ">
-            <button
-              className="p-2 bg-primary rounded-md text-white text-lg font-medium"
-              onClick={() => getLesson("last")}
-            >
-              Previous Lesson
-            </button>
-            <button
-              className="p-2 bg-primary rounded-md text-white text-lg font-medium"
-              onClick={() => getLesson("next")}
-            >
-              Next Lesson
-            </button>
+            {lesson.lessonTitle.split(" ")[1] > 1 ? (
+              <button
+                className="p-2 bg-primary rounded-md text-white text-lg font-medium"
+                onClick={() => getLesson("last")}
+              >
+                Previous Lesson
+              </button>
+            ) : <div></div>}
+            {lesson.lessonTitle.split(" ")[1] <
+            Object.keys(parsedLessons).length ? (
+              <button
+                className="p-2 bg-primary rounded-md text-white text-lg font-medium"
+                onClick={() => getLesson("next")}
+              >
+                Next Lesson
+              </button>
+            ) : null}
           </div>
           <div className="flex flex-col p-4 px-4 bg-white rounded-md mb-4">
             <div className="text-3xl font-bold text-center my-4 border-b-2 border-gray-500 pb-2">

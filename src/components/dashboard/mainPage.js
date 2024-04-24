@@ -107,6 +107,7 @@ const MainPage = () => {
   const handleTogglePopup = () => {
     setShowPopup(!showPopup);
   };
+  console.log(friends);
   return (
     <div className="flex h-full w-full gap-4 px-10">
       <div className="w-2/3 flex flex-col h-fit gap-4">
@@ -177,7 +178,9 @@ const MainPage = () => {
                     <IoPersonRemove />
                   </button>
                 </div>
-                <p className="text-green-600">4 goals</p>
+                <p className="text-green-600">
+                  {Object.keys(friend.goals).length} goals
+                </p>
               </div>
             ))}
           </div>
