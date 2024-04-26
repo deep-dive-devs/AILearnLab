@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
       const usersList = await Promise.all(
         usersSnapshot.docs.map(async (doc) => {
           const usersData = doc.data();
-          const friendPromises = usersData.friends.map(async (friendRef) => {
+          const friendPromises = usersData?.friends?.map(async (friendRef) => {
             const friendDoc = await getDoc(friendRef);
             if (friendDoc.exists()) {
               return friendDoc.data();
@@ -33,7 +33,11 @@ export const AuthProvider = ({ children }) => {
             }
           });
 
-          const friends = await Promise.all(friendPromises);
+          const friends = friendPromises
+            ? await Promise.all(friendPromises)
+            : [
+              
+            ];
           usersData.friends = friends;
           return usersData;
         })

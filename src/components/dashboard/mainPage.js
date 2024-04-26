@@ -8,10 +8,16 @@ import {
   collection,
   doc,
   updateDoc,
-
 } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import UsersPopup from "./usersPopup";
+import Image from "next/image";
+import DoughnutChart from "./mainPage/DoughnutChart";
+import LineChart from "./mainPage/LineChart";
+import RecentGoals from "./mainPage/recentGoals";
+import { IoPersonAdd, IoPersonRemove } from "react-icons/io5";
+import { VscRemove } from "react-icons/vsc";
+
 const MainPage = () => {
   const { user, loading, users, updateData } = useAuth();
 
@@ -93,7 +99,6 @@ const MainPage = () => {
         senderID: userDocRef,
         receiverID: friendDocRef,
       });
-     
     } catch (error) {
       console.error("Error sending friend request:", error);
     }
@@ -102,19 +107,52 @@ const MainPage = () => {
   const handleTogglePopup = () => {
     setShowPopup(!showPopup);
   };
+  console.log(friends);
   return (
-    <div>
-      <div>{user.email}</div>
-      <div className="flex">
-        <div className="w-1/2"></div>
-        <div className="bg-backgroundSecondary w-1/2 h-full min-h-[40vh] rounded-xl p-4">
+    <div className="flex h-full w-full gap-4 px-10">
+      <div className="w-2/3 flex flex-col h-fit gap-4">
+        <div className="w-full flex gap-4 h-fit">
+          <div className="w-1/2 bg-[#1976D2] rounded-lg p-4 text-white space-y-4 shadow-xl">
+            <div className="flex gap-4 items-center ">
+              <div>
+                <Image src={"/flag.png"} alt="flag" width={50} height={50} />
+              </div>
+              <h2 className="text-4xl">12</h2>
+            </div>
+            <p className="text-sm">Total lessons started this Month</p>
+          </div>
+          <div className="w-1/2 bg-[#2EB46B] rounded-lg p-4 text-white space-y-4 shadow-xl">
+            <div className="flex gap-4 items-center ">
+              <div>
+                <Image
+                  src={"/checkmark.png"}
+                  alt="checkmark"
+                  width={50}
+                  height={50}
+                />
+              </div>
+              <h2 className="text-4xl">02</h2>
+            </div>
+            <p className="text-sm">Total lessons completed this Month</p>
+          </div>
+        </div>
+        <div className="w-full">
+          <RecentGoals />
+        </div>
+        <div className="w-full">
+          <h2 className="text-xl"> Goals</h2>
+          <LineChart />
+        </div>
+      </div>
+      <div className="w-1/3 h-full flex flex-col gap-4">
+        <div className="bg-backgroundSecondary w-full h-fit   rounded-xl p-4">
           <div className="flex justify-between">
-            <h2>Friends</h2>
+            <h3>Friends</h3>
             <button
               onClick={handleTogglePopup}
-              className="bg-buttonColor mt-2 rounded-lg hover:scale-105 hover:shadow-lg py-2 px-4 text-white"
+              className="bg-buttonColor rounded-lg hover:scale-105 hover:shadow-lg p-2  text-white"
             >
-              Add more
+              <IoPersonAdd />
             </button>
             {showPopup && (
               <UsersPopup
@@ -124,18 +162,31 @@ const MainPage = () => {
               />
             )}
           </div>
-          {friends.map((friend, index) => (
-            <div key={index} className="flex items-center gap-4">
-              <div>{friend.displayName}</div>
-              <button
-                disabled={removingFriendId === friend.uid}
-                className="cursor-pointer bg-red-600 px-3 py-1 rounded-full text-white"
-                onClick={() => handleUnfriend(friend.uid)}
+          <div className="h-fit min-h-[20vh] max-h-[30vh] overflow-auto">
+            {friends.map((friend, index) => (
+              <div
+                key={index}
+                className="flex items-center my-1 justify-between border border-green-600 w-full p-2 bg-green-600/10"
               >
-                {removingFriendId === friend.uid ? "Removing..." : "Remove"}
-              </button>
-            </div>
-          ))}
+                <div className="w-fit flex gap-4 items-center justify-center">
+                  <p>{friend.displayName}</p>
+                  <button
+                    disabled={removingFriendId === friend.uid}
+                    className="bg-red-600 rounded-lg hover:scale-105 hover:shadow-lg p-2  text-white"
+                    onClick={() => handleUnfriend(friend.uid)}
+                  >
+                    <IoPersonRemove />
+                  </button>
+                </div>
+                <p className="text-green-600">
+                  {Object.keys(friend.goals).length} goals
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="bg-backgroundSecondary w-full h-full   rounded-xl p-4">
+          <DoughnutChart />
         </div>
       </div>
     </div>

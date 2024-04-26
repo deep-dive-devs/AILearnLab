@@ -7,6 +7,7 @@ import { db } from "@/app/firebase";
 import React, { useState } from "react";
 import CustomInput from "../shared/customInput";
 import { addDoc, collection,setDoc,doc } from "firebase/firestore";
+import Image from "next/image";
 const RegisterForm = () => {
   //uses state to handle form changes
   const [registerData, setRegisterData] = useState({
@@ -78,10 +79,17 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="bg-backgroundSecondary flex flex-col p-4 rounded-2xl shadow-2xl">
-      <div>
-        <div className="text-3xl font-medium">Welcome !</div>
-        <div className="text-base font-medium">
+    <div className=" w-full bg-backgroundSecondary max-w-[500px] flex flex-col p-4 rounded-2xl h-full shadow-2xl">
+      <div className="w-full  flex items-center justify-center flex-col gap-2">
+        <Image
+          className=""
+          src={"/AI-101.png"}
+          alt="aibot"
+          width={150}
+          height={150}
+        />
+        <div className="text-2xl font-medium">Welcome !</div>
+        <div className="text-sm text-center font-light">
           Enter your Credentials to access your account
         </div>
       </div>
