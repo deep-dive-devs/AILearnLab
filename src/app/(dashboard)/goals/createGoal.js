@@ -1,9 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dummyData from "./dummy";
 import { auth, db } from "@/app/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import TitleNotification from "./titleNotification";
+import { useAuth } from "@/components/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const CreateGoal = ({ userId, user, setUserData }) => {
   const [showTitleNotification, setShowTitleNotification] = useState(false);
@@ -12,6 +14,8 @@ const CreateGoal = ({ userId, user, setUserData }) => {
   const [response, setResponse] = useState("");
 
   const userRef = doc(db, "authUsers", userId);
+  const { updateData } = useAuth();
+
   const handleGenerateResponse = async () => {
     //setResponse(dummyData)
     try {
@@ -31,7 +35,7 @@ const CreateGoal = ({ userId, user, setUserData }) => {
     }
   };
   console.log(response);
-  const saveLesson = () => {
+  const saveLesson = async () => {
     if (!inputTitle) {
       setShowTitleNotification(true);
     } else {
@@ -48,11 +52,12 @@ const CreateGoal = ({ userId, user, setUserData }) => {
         completedDate: null,
       };
 
-      setDoc(
+      await setDoc(
         userRef,
-        { goals: { [inputTitle]: { ...response, insights:insights  } } },
+        { goals: { [inputTitle]: { ...response, insights: insights } } },
         { merge: true }
       );
+      updateData();
       clearInputs();
     }
   };
