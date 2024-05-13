@@ -1,11 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { db, auth } from "@/app/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import SaveNotification from "./saveNotification";
+import { toast } from "sonner";
+import { useAuth } from "@/components/context/AuthContext";
 
 const Practice = () => {
+  const { updateData } = useAuth();
+
   const [showSaveNotification, setShowSaveNotification] = useState(false);
   const searchParams = useSearchParams();
   const userId = searchParams.get("uid") ? searchParams.get("uid") : null;
@@ -21,7 +25,7 @@ const Practice = () => {
     lessonTitle: searchParams.get("lessonTitle"),
     lesson: parsedLesson,
   });
-
+  const router = useRouter();
   const getLesson = (direction) => {
     let lessonTitle = +lesson.lessonTitle.split(" ")[1];
 
@@ -76,7 +80,22 @@ const Practice = () => {
       console.log(err);
     }
   };
+  const completeGoal = () => {
+    const docRef = doc(db, "authUsers", userId);
 
+    try {
+      updateDoc(docRef, {
+        [`goals.${lesson.title}.insights.completedDate`]:
+          new Date().toLocaleDateString(),
+      });
+
+      toast.success("Goal Completed");
+      updateData();
+      router.push("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="flex flex-col px-4 flex-grow">
       {showSaveNotification ? (
@@ -94,7 +113,9 @@ const Practice = () => {
               >
                 Previous Lesson
               </button>
-            ) : <div></div>}
+            ) : (
+              <div></div>
+            )}
             {lesson.lessonTitle.split(" ")[1] <
             Object.keys(parsedLessons).length ? (
               <button
@@ -103,7 +124,14 @@ const Practice = () => {
               >
                 Next Lesson
               </button>
-            ) : null}
+            ) : (
+              <button
+                className="p-2 bg-primary rounded-md text-white text-lg font-medium"
+                onClick={() => completeGoal()}
+              >
+                Complete Goal
+              </button>
+            )}
           </div>
           <div className="flex flex-col p-4 px-4 bg-white rounded-md mb-4">
             <div className="text-3xl font-bold text-center my-4 border-b-2 border-gray-500 pb-2">

@@ -27,6 +27,7 @@ const MainPage = () => {
 
   const [notFriends, setNotFriends] = useState([]);
   const [removingFriendId, setRemovingFriendId] = useState();
+  const [popUser, setPopUser] = useState();
 
   useEffect(() => {
     const getFriendsOfUser = () => {
@@ -54,10 +55,18 @@ const MainPage = () => {
 
       return notFriendsList;
     };
+    const getUser = () => {
+      if (!user || !users) return null;
+      const authenticatedUser = users.find((u) => u.uid === user.uid);
 
+      return authenticatedUser;
+    };
+
+    setPopUser(getUser());
     setNotFriends(getNotFriendsOfUser());
     setFriends(getFriendsOfUser());
   }, [user, users]);
+  console.log(popUser);
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -107,7 +116,54 @@ const MainPage = () => {
   const handleTogglePopup = () => {
     setShowPopup(!showPopup);
   };
+ 
+  const getGoalsThisMonth = (goals) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; 
+    const currentYear = currentDate.getFullYear();
+
+    let lessonCount = 0;
+
+    Object.values(goals).forEach((lessonsArray) => {
+      const insights = lessonsArray.insights;
+      console.log(insights);
+      const createdDate = new Date(insights.createdDate);
+      if (
+        createdDate.getMonth() + 1 === currentMonth &&
+        createdDate.getFullYear() === currentYear
+      ) {
+        lessonCount++;
+      }
+    });
+
+    return lessonCount;
+  };
+  const getCompletedGoalsThisMonth = (goals) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; 
+    const currentYear = currentDate.getFullYear();
+
+    let lessonCount = 0;
+
+    Object.values(goals).forEach((lessonsArray) => {
+      const insights = lessonsArray.insights;
+      console.log(insights);
+      const createdDate = new Date(insights.completedDate);
+      if (
+        createdDate.getMonth() + 1 === currentMonth &&
+        createdDate.getFullYear() === currentYear
+      ) {
+        lessonCount++;
+      }
+    });
+
+    return lessonCount;
+  };
   console.log(friends);
+  const goalsStartedThisMonth = popUser ? getGoalsThisMonth(popUser.goals) : 0;
+  const goalsCompletedThisMonth = popUser
+    ? getCompletedGoalsThisMonth(popUser.goals)
+    : 0;
   return (
     <div className="flex h-full w-full gap-4 px-10">
       <div className="w-2/3 flex flex-col h-fit gap-4">
@@ -117,9 +173,9 @@ const MainPage = () => {
               <div>
                 <Image src={"/flag.png"} alt="flag" width={50} height={50} />
               </div>
-              <h2 className="text-4xl">12</h2>
+              <h2 className="text-4xl">{goalsStartedThisMonth}</h2>
             </div>
-            <p className="text-sm">Total lessons started this Month</p>
+            <p className="text-sm">Total goals started this Month</p>
           </div>
           <div className="w-1/2 bg-[#2EB46B] rounded-lg p-4 text-white space-y-4 shadow-xl">
             <div className="flex gap-4 items-center ">
@@ -131,7 +187,7 @@ const MainPage = () => {
                   height={50}
                 />
               </div>
-              <h2 className="text-4xl">02</h2>
+              <h2 className="text-4xl">{goalsCompletedThisMonth}</h2>
             </div>
             <p className="text-sm">Total lessons completed this Month</p>
           </div>
