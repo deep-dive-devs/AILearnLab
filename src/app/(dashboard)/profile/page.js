@@ -62,7 +62,6 @@ const Profile = () => {
   }, [user, users]);
 
   const handleChange = (e) => {
-    //Use e to retrive name and value of input field and then proceed to update register data
     const { name, value } = e.target;
     setUserDataForm((prevState) => ({
       ...prevState,
@@ -72,7 +71,6 @@ const Profile = () => {
   };
 
   const handleSecondFormChange = (e) => {
-    //Use e to retrive name and value of input field and then proceed to update register data
     const { name, value } = e.target;
     setPasswordForm((prevState) => ({
       ...prevState,
@@ -96,11 +94,10 @@ const Profile = () => {
         setErrorPassword("You cannot use the Old passwrod Again");
         return;
       }
-      // Re-authenticate user for security (you may need to implement this part)
       const recentUser = auth.currentUser;
       const credential = EmailAuthProvider.credential(user.email, oldPassword);
       await reauthenticateWithCredential(recentUser, credential);
-      // Change password
+
       await updatePassword(recentUser, newPassword);
       toast.success("Password Changed Successfully");
     } catch (error) {
@@ -130,10 +127,9 @@ const Profile = () => {
         where("uid", "==", user.uid)
       );
 
-      // Execute the user query
       const userQuerySnapshot = await getDocs(userQ);
 
-      // Update the user document
+   
       if (!userQuerySnapshot.empty) {
         const userDocRef = userQuerySnapshot.docs[0].ref;
         await updateProfile(user, {
@@ -158,8 +154,8 @@ const Profile = () => {
   };
   console.log(userDataForm);
   return (
-    <div className="bg-backgroundTertiary w-full min-h-[80vh] h-full mx-3 p-5 rounded-lg">
-      <div className="m-3">Search</div>
+    <div className="backgroundPrimary w-full min-h-[80vh] h-full mx-3 p-5 rounded-lg">
+   
       <div className="flex justify-center items-center gap-5">
         <div className="w-[60%] bg-white p-10 rounded-2xl ">
           <h2 className="text-2xl font-bold">User Profile</h2>

@@ -14,12 +14,12 @@ module.exports = {
       },
       colors: {
         primary: "#091B50",
-        backgroundPrimary: "#FFF3E4",
+        backgroundPrimary: "#E0E0E0",
         backgroundSecondary: "#fff",
         buttonColor: "#1A3781",
         backgroundTertiary: "#f3cab6",
-        popupBackground:"#1A1A32",
-        popupText:"#E6CCCC"
+        popupBackground: "#1A1A32",
+        popupText: "#E6CCCC",
       },
     },
   },
