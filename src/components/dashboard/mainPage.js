@@ -33,22 +33,20 @@ const MainPage = () => {
     const getFriendsOfUser = () => {
       if (!user || !users) return [];
       const authenticatedUser = users.find((u) => u.uid === user.uid);
-      // If authenticated user is not found or if they don't have friends, return an empty array
+
       if (!authenticatedUser || !authenticatedUser.friends) return [];
 
-      // Map over the friend IDs of the authenticated user and find the corresponding user objects
       return authenticatedUser.friends;
     };
     const getNotFriendsOfUser = () => {
       if (!user || !users) return [];
       const authenticatedUser = users.find((u) => u.uid === user.uid);
-      // If authenticated user is not found or if they don't have friends, return an empty array
       if (!authenticatedUser || !authenticatedUser.friends) return [];
 
-      // Get IDs of friends of authenticated user
-      const friendIds = authenticatedUser.friends.map((friend) => friend.uid);
+      const friendIds = authenticatedUser.friends
+        ?.filter((friend) => friend?.uid)
+        .map((friend) => friend.uid);
 
-      // Filter out the authenticated user and their friends from the list of all users
       const notFriendsList = users.filter(
         (u) => u.uid !== user.uid && !friendIds.includes(u.uid)
       );
@@ -76,7 +74,6 @@ const MainPage = () => {
       setRemovingFriendId(friendId);
       const friendDocRef = doc(db, "authUsers", friendId);
       const userDocRef = doc(db, "authUsers", user.uid);
-      // Update the authenticated user's document to remove the friend's reference from the friends array
       await updateDoc(userDocRef, {
         friends: arrayRemove(friendDocRef),
       });
@@ -116,10 +113,10 @@ const MainPage = () => {
   const handleTogglePopup = () => {
     setShowPopup(!showPopup);
   };
- 
+
   const getGoalsThisMonth = (goals) => {
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1; 
+    const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
 
     let lessonCount = 0;
@@ -140,7 +137,7 @@ const MainPage = () => {
   };
   const getCompletedGoalsThisMonth = (goals) => {
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1; 
+    const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
 
     let lessonCount = 0;
@@ -219,23 +216,26 @@ const MainPage = () => {
             )}
           </div>
           <div className="h-fit min-h-[20vh] max-h-[30vh] overflow-auto">
-            {friends.map((friend, index) => (
+            {friends?.map((friend, index) => (
               <div
                 key={index}
                 className="flex items-center my-1 justify-between border border-green-600 w-full p-2 bg-green-600/10"
               >
                 <div className="w-fit flex gap-4 items-center justify-center">
-                  <p>{friend.displayName}</p>
+                  <p>{friend?.displayName}</p>
                   <button
-                    disabled={removingFriendId === friend.uid}
+                    disabled={removingFriendId === friend?.uid}
                     className="bg-red-600 rounded-lg hover:scale-105 hover:shadow-lg p-2  text-white"
-                    onClick={() => handleUnfriend(friend.uid)}
+                    onClick={() => handleUnfriend(friend?.uid)}
                   >
                     <IoPersonRemove />
                   </button>
                 </div>
                 <p className="text-green-600">
-                  {Object.keys(friend.goals).length} goals
+                  {friend && friend.goals
+                    ? Object.keys(friend?.goals).length
+                    : 0}{" "}
+                  goals
                 </p>
               </div>
             ))}
