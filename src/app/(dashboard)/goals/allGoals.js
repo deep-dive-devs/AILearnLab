@@ -12,7 +12,7 @@ const AllGoals = ({ userData, deleteGoal, setUserData }) => {
   useEffect(() => {
     setParsedUserData(userData ? userData : JSON.parse(searchParams.get("userData")));
   }, [userData, searchParams]);
-  console.log(userData,  JSON.parse(searchParams.get("userData")), parsedUserData)
+
   return (
     <div className="flex flex-col w-full mx-auto  bg-slate-400 rounded-md">
       <div className="text-3xl mx-auto p-2 font-extrabold">All Goals</div>

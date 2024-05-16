@@ -35,7 +35,7 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
     // }
     setReviewResponse(true)
   };
-  
+
   const saveLesson = async () => {
     if (!inputTitle) {
       setShowTitleNotification(true);
@@ -46,6 +46,7 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
         createdDate: new Date().toLocaleDateString(),
         updatedDate: new Date().toLocaleDateString(),
         completedDate: null,
+        lastOpened: new Date().toLocaleDateString(),
       };
       currData = { ...currData, [inputTitle]: { ...response, insights: insights } };
       setUserData((prevUserData) => ({
