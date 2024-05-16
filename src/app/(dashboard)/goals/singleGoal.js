@@ -1,18 +1,45 @@
 import React from "react";
 import { useState } from "react";
+import { db } from "@/app/firebase";
 import Link from "next/link";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
-const SingleGoal = ({ title, lessons, uid }) => {
+const SingleGoal = ({ title, lessons, uid, userData, setUserData }) => {
   const [open, setOpen] = useState(false);
   const filteredLessons = Object.fromEntries(
     Object.entries(lessons).filter(([key]) => key !== "insights")
   );
+  const userRef = doc(db, "authUsers", uid);
+
+  const openAndClose = () => {
+    setOpen(!open)
+    if (userData.recent) {
+      let recent = [...userData.recent]
+      
+      if (recent.length < 3 ) {
+        recent.unshift(title);
+      } else {
+        recent.pop();      
+        recent.unshift(title); 
+      }
+
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        recent: recent,
+      }));
+    } else {
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        recent: [title],
+      }));
+    }
+  }
 
   return (
     <div className="felx flex-col w-90 px-10">
       <button
         className="px-2 mx-auto bg-primary rounded-md text-white text-sm font-medium w-20"
-        onClick={() => setOpen(!open)}
+        onClick={() => openAndClose(title)}
       >
         {open ? "Close" : "Open"}
       </button>

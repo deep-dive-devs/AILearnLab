@@ -7,7 +7,7 @@ import TitleNotification from "./titleNotification";
 import { useAuth } from "@/components/context/AuthContext";
 import { useRouter } from "next/navigation";
 
-const CreateGoal = ({ userId, user, setUserData }) => {
+const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
   const [showTitleNotification, setShowTitleNotification] = useState(false);
   const [userInput, setUserInput] = useState("");
   const [inputTitle, setInputTitle] = useState("");
@@ -17,41 +17,42 @@ const CreateGoal = ({ userId, user, setUserData }) => {
   const { updateData } = useAuth();
 
   const handleGenerateResponse = async () => {
-    //setResponse(dummyData)
-    try {
-      const response = await fetch("/api/openai", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: `teach me ${userInput}, please break it down into approachable lessons and in a JSON format simlir to {"Lesson #":{"Topic":,"what to study":}}, 'What to study' should be detailed, do not include text before or after the JSON object`,
-        }),
-      });
-      const responseData = await response.json();
-      setResponse(JSON.parse(responseData.response));
-    } catch (error) {
-      console.error("Error generating OpenAI response:", error);
-    }
+    setResponse(dummyData)
+    // try {
+    //   const response = await fetch("/api/openai", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       message: `teach me ${userInput}, please break it down into approachable lessons and in a JSON format simlir to {"Lesson #":{"Topic":,"what to study":}}, 'What to study' should be detailed, do not include text before or after the JSON object`,
+    //     }),
+    //   });
+    //   const responseData = await response.json();
+    //   setResponse(JSON.parse(responseData.response));
+    // } catch (error) {
+    //   console.error("Error generating OpenAI response:", error);
+    // }
+    setReviewResponse(true)
   };
-  console.log(response);
+  
   const saveLesson = async () => {
     if (!inputTitle) {
       setShowTitleNotification(true);
     } else {
       let currData = user.goals;
 
-      currData = { ...currData, [inputTitle]: response };
-      setUserData((prevUserData) => ({
-        ...prevUserData,
-        goals: currData,
-      }));
       const insights = {
         createdDate: new Date().toLocaleDateString(),
         updatedDate: new Date().toLocaleDateString(),
         completedDate: null,
       };
-
+      currData = { ...currData, [inputTitle]: { ...response, insights: insights } };
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        goals: currData,
+      }));
+      
       await setDoc(
         userRef,
         { goals: { [inputTitle]: { ...response, insights: insights } } },
@@ -60,6 +61,7 @@ const CreateGoal = ({ userId, user, setUserData }) => {
       updateData();
       clearInputs();
     }
+    setReviewResponse(false)
   };
 
   const clearInputs = () => {
