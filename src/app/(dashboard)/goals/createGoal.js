@@ -15,7 +15,7 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
 
   const userRef = doc(db, "authUsers", userId);
   const { updateData } = useAuth();
-
+  console.log(response)
   const handleGenerateResponse = async () => {
     setResponse(dummyData)
     // try {
@@ -69,6 +69,7 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
     setResponse("");
     setInputTitle("");
     setUserInput("");
+    setReviewResponse(false)
   };
 
   return (
@@ -81,10 +82,10 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
       ) : (
         <>
           <div className="text-4xl mx-auto font-extrabold">Create Goal</div>
+              {response &&
           <div className="min-w-3/4 h-4/5 bg-white mb-2 rounded-md flex-grow">
             <div className="flex flex-col grow-0 max-h-4/5">
-              {response &&
-                Object.entries(response).map(([key, value], index) => (
+                {Object.entries(response).map(([key, value], index) => (
                   <div key={key} className="p-2">
                     <div className="p-2 text-xl">{key}</div>
                     <div className="px-2 mb-1">{response[key]["Topic"]}</div>
@@ -92,20 +93,23 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
                       {response[key]["What to study"]}
                     </div>
                   </div>
-                ))}
+          ))}
             </div>
           </div>
+}
           <textarea
-            className="rounded-md mb-4 px-2 pt-2"
+            className="rounded-md mb-4 px-2 pt-2 resize-y"
             value={inputTitle}
             onChange={(e) => setInputTitle(e.target.value)}
             placeholder="Give your lesson a title"
+            rows="2"
           />
           <textarea
-            className="rounded-md mb-4 px-2 pt-2"
+            className="rounded-md mb-4 px-2 pt-2 resize-y"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             placeholder="What would you like to learn about today?"
+            rows="2"
           />
           {response ? (
             <div className="flex justify-between m-auto w-1/2">

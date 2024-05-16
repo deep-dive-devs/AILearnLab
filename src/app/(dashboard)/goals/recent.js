@@ -8,15 +8,15 @@ const Recent = ({userData}) => {
     : [];
     
     return(
-        <div>
+        <div className="flex flex-col p-4 w-2/5 ml-2 bg-slate-400 rounded-md justify-items-center">
             <div className="text-4xl mx-auto font-extrabold">Recent</div>
             {sortedGoals.length > 0 ? (
                 sortedGoals.map(([goalTitle, goal]) => (
                 <div
                     key={goalTitle}
-                    className="flex flex-col p-2 mx-2 bg-white mb-2 rounded-md flex-grow"
+                    className="flex flex-col p-2 mx-2 bg-white mb-1 rounded-md flex-grow "
                 >
-                    <div className="p-2 text-2xl font-bold">{goalTitle}</div>
+                    <div className="py-1 px-2 text-2xl font-bold text-center">{goalTitle}</div>
                 </div>
                 ))
             ) : (

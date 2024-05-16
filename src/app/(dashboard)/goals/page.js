@@ -37,19 +37,17 @@ const Goals = () => {
   return (
     <div className="flex flex-col px-4">
       <div className="flex justify-between flex-grow mb-2">
-        <div className="flex-grow">
+        
           <CreateGoal
             userId={userId}
             user={userData}
             setUserData={setUserData}
             setReviewResponse={setReviewResponse}
           />
-        </div>
-        {!reviewResponse && <div className="flex flex-col p-4 w-2/5 ml-2 bg-slate-400 rounded-md">
-          <div className="text-3xl mx-auto font-extrabold">
+        
+        {!reviewResponse && 
             <Recent userData={userData} />
-          </div>
-        </div>}
+        }
       </div>
       {userData && !reviewResponse &&(
         <AllGoals 
