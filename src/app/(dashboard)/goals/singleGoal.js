@@ -10,40 +10,32 @@ const SingleGoal = ({ title, lessons, uid, userData, setUserData }) => {
     Object.entries(lessons).filter(([key]) => key !== "insights")
   );
   const userRef = doc(db, "authUsers", uid);
+
+  const saveToDatabase = async (data) => {
+    await setDoc(
+      userRef,
+      { ...data },
+    );
+  }
+
   const openAndClose = () => {
     setOpen(!open)
-    // if (userData.recent) {
-      // let recent = [...userData.recent]
-      
-      // console.log(userData.recent, recent.length < 3 && !recent?.includes(title))
-      // if (recent.length < 3 && !recent.includes(title)) {
-      //   recent.unshift(title);
-      // } else {
-      //   recent.pop();      
-      //   recent.unshift(title); 
-      // }
 
-    //   setUserData((prevUserData) => ({
-    //     ...prevUserData,
-    //     goals: recent,
-    //   }));
-    // } else {
-    //   setUserData((prevUserData) => ({
-    //     ...prevUserData,
-    //     recent: [title],
-    //   }));
-    // }
+    if (!open) {
+      lessons.insights = {
+        ...lessons.insights, 
+        lastOpened:new Date().toLocaleString()
+      }
+      let goal = {...userData.goals, [title]: { ...lessons, insights: lessons.insights }}
+  
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        goals:goal,
+      }));
 
-    lessons.insights = {
-      ...lessons.insights, 
-      lastOpened:new Date().toLocaleString()
+      saveToDatabase(userData)
     }
 
-    setUserData((prevUserData) => ({
-      ...prevUserData,
-      goals:{...userData.goals, [title]: { ...lessons, insights: lessons.insights }},
-    }));
-    console.log(userData.goals[title].insights)
   }
 
   return (
