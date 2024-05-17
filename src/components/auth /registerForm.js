@@ -24,7 +24,7 @@ const RegisterForm = () => {
       [name]: value,
     }));
   };
-  console.log(registerData);
+  
   //after successfully signing up, it will direct user to login page using router
   const router = useRouter();
 

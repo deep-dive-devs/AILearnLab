@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SingleGoal from "./singleGoal";
 import { setDoc } from "firebase/firestore";
 import { useSearchParams } from "next/navigation";
 
-const AllGoals = ({ userData, deleteGoal }) => {
+const AllGoals = ({ userData, deleteGoal, setUserData }) => {
   const searchParams = useSearchParams();
-  const [parsedUserData, setParsedUserData] = useState(userData);
+  const [parsedUserData, setParsedUserData] = useState(
+    userData? userData : JSON.parse(searchParams.get("userData"))
+  );
 
+  useEffect(() => {
+    setParsedUserData(userData ? userData : JSON.parse(searchParams.get("userData")));
+  }, [userData, searchParams]);
 
   return (
     <div className="flex flex-col w-full mx-auto  bg-slate-400 rounded-md">
@@ -27,7 +32,13 @@ const AllGoals = ({ userData, deleteGoal }) => {
                 Remove
               </button>
             </div>
-            <SingleGoal title={key} lessons={value} uid={parsedUserData.uid} />
+            <SingleGoal 
+              title={key} 
+              lessons={value} 
+              uid={parsedUserData.uid} 
+              userData={parsedUserData}
+              setUserData={setUserData}
+            />
           </div>
         ))}
     </div>
