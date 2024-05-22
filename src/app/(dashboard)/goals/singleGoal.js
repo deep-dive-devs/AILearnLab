@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { db } from "@/app/firebase";
+import { auth, db } from "@/app/firebase";
 import Link from "next/link";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
@@ -9,34 +9,35 @@ const SingleGoal = ({ title, lessons, uid, userData, setUserData }) => {
   const filteredLessons = Object.fromEntries(
     Object.entries(lessons).filter(([key]) => key !== "insights")
   );
-  const userRef = doc(db, "authUsers", uid);
+  const userId = auth.currentUser.uid;
+
+  const userRef = doc(db, "authUsers", userId);
 
   const saveToDatabase = async (data) => {
-    await setDoc(
-      userRef,
-      { ...data },
-    );
-  }
+    await setDoc(userRef, { ...data });
+  };
 
   const openAndClose = () => {
-    setOpen(!open)
+    setOpen(!open);
 
     if (!open) {
       lessons.insights = {
-        ...lessons.insights, 
-        lastOpened:new Date().toLocaleString()
-      }
-      let goal = {...userData.goals, [title]: { ...lessons, insights: lessons.insights }}
-  
+        ...lessons.insights,
+        lastOpened: new Date().toLocaleString(),
+      };
+      let goal = {
+        ...userData.goals,
+        [title]: { ...lessons, insights: lessons.insights },
+      };
+
       setUserData((prevUserData) => ({
         ...prevUserData,
-        goals:goal,
+        goals: goal,
       }));
 
-      saveToDatabase(userData)
+      saveToDatabase(userData);
     }
-
-  }
+  };
 
   return (
     <div className="felx flex-col w-90 px-10">
@@ -46,22 +47,14 @@ const SingleGoal = ({ title, lessons, uid, userData, setUserData }) => {
       >
         {open ? "Close" : "Open"}
       </button>
+
       {open &&
         Object.entries(filteredLessons)
           .sort((a, b) => a[0].split(" ")[1] - +b[0].split(" ")[1])
           .map(([key, value], index) => (
             <Link
               key={key}
-              href={{
-                pathname: "/singlePractice",
-                query: {
-                  title: title,
-                  lessonTitle: key,
-                  lesson: JSON.stringify(value),
-                  lessons: JSON.stringify(filteredLessons),
-                  uid: uid,
-                },
-              }}
+              href={`/singlePractice/${key.replace(" ", "_")}?title=${title}`}
             >
               <div className="p-2 my-1 border-t border-black w-70 hover:bg-gray-200">
                 <div className="p-2 text-xl">{key}</div>

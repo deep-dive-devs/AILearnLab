@@ -15,25 +15,25 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
 
   const userRef = doc(db, "authUsers", userId);
   const { updateData } = useAuth();
-  console.log(response)
+  // console.log(response);
   const handleGenerateResponse = async () => {
-    setResponse(dummyData)
-    // try {
-    //   const response = await fetch("/api/openai", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       message: `teach me ${userInput}, please break it down into approachable lessons and in a JSON format simlir to {"Lesson #":{"Topic":,"what to study":}}, 'What to study' should be detailed, do not include text before or after the JSON object`,
-    //     }),
-    //   });
-    //   const responseData = await response.json();
-    //   setResponse(JSON.parse(responseData.response));
-    // } catch (error) {
-    //   console.error("Error generating OpenAI response:", error);
-    // }
-    setReviewResponse(true)
+    // setResponse(dummyData)
+    try {
+      const response = await fetch("/api/openai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `teach me ${userInput}, please break it down into approachable lessons and in a JSON format simlir to {"Lesson #":{"Topic":,"what to study":}}, 'What to study' should be detailed, do not include text before or after the JSON object`,
+        }),
+      });
+      const responseData = await response.json();
+      setResponse(JSON.parse(responseData.response));
+    } catch (error) {
+      console.error("Error generating OpenAI response:", error);
+    }
+    setReviewResponse(true);
   };
 
   const saveLesson = async () => {
@@ -48,12 +48,15 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
         completedDate: null,
         lastOpened: new Date().toLocaleDateString(),
       };
-      currData = { ...currData, [inputTitle]: { ...response, insights: insights } };
+      currData = {
+        ...currData,
+        [inputTitle]: { ...response, insights: insights },
+      };
       setUserData((prevUserData) => ({
         ...prevUserData,
         goals: currData,
       }));
-      
+
       await setDoc(
         userRef,
         { goals: { [inputTitle]: { ...response, insights: insights } } },
@@ -62,14 +65,14 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
       updateData();
       clearInputs();
     }
-    setReviewResponse(false)
+    setReviewResponse(false);
   };
 
   const clearInputs = () => {
     setResponse("");
     setInputTitle("");
     setUserInput("");
-    setReviewResponse(false)
+    setReviewResponse(false);
   };
 
   return (
@@ -82,9 +85,9 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
       ) : (
         <>
           <div className="text-4xl mx-auto font-extrabold">Create Goal</div>
-              {response &&
-          <div className="min-w-3/4 h-4/5 bg-white mb-2 rounded-md flex-grow">
-            <div className="flex flex-col grow-0 max-h-4/5">
+          {response && (
+            <div className="min-w-3/4 h-4/5 bg-white mb-2 rounded-md flex-grow">
+              <div className="flex flex-col grow-0 max-h-4/5">
                 {Object.entries(response).map(([key, value], index) => (
                   <div key={key} className="p-2">
                     <div className="p-2 text-xl">{key}</div>
@@ -93,10 +96,10 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
                       {response[key]["What to study"]}
                     </div>
                   </div>
-          ))}
+                ))}
+              </div>
             </div>
-          </div>
-}
+          )}
           <textarea
             className="rounded-md mb-4 px-2 pt-2 resize-y"
             value={inputTitle}
