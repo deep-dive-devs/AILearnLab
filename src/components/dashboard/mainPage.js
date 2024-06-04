@@ -145,10 +145,10 @@ const MainPage = () => {
     Object.values(goals).forEach((lessonsArray) => {
       const insights = lessonsArray.insights;
       console.log(insights);
-      const createdDate = new Date(insights.completedDate);
+      const completedDate = new Date(insights.completedDate);
       if (
-        createdDate.getMonth() + 1 === currentMonth &&
-        createdDate.getFullYear() === currentYear
+        completedDate.getMonth() + 1 === currentMonth &&
+        completedDate.getFullYear() === currentYear
       ) {
         lessonCount++;
       }
@@ -156,16 +156,69 @@ const MainPage = () => {
 
     return lessonCount;
   };
-  console.log(friends);
+  const getCompletedGoalsThisYear = (goals) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+
+    const monthlyCounts = new Array(currentMonth).fill(0); // Initialize an array with length based on current month
+
+    Object.values(goals).forEach((lessonsArray) => {
+      const insights = lessonsArray.insights;
+      const completedDate = new Date(insights.completedDate);
+
+      if (completedDate.getFullYear() === currentYear) {
+        const monthIndex = completedDate.getMonth();
+        if (monthIndex < currentMonth) {
+          // Ensure the month index is within the range
+          monthlyCounts[monthIndex]++;
+        }
+      }
+    });
+
+    return monthlyCounts;
+  };
+
+  const getCreatedGoalsThisYear = (goals) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+
+    const monthlyCounts = new Array(currentMonth).fill(0); 
+
+    Object.values(goals).forEach((lessonsArray) => {
+      const insights = lessonsArray.insights;
+      const createdDate = new Date(insights.createdDate);
+
+      if (createdDate.getFullYear() === currentYear) {
+        const monthIndex = createdDate.getMonth();
+        if (monthIndex < currentMonth) {
+          // Ensure the month index is within the range
+          monthlyCounts[monthIndex]++;
+        }
+      }
+    });
+
+    return monthlyCounts;
+  };
+
+
   const goalsStartedThisMonth = popUser ? getGoalsThisMonth(popUser.goals) : 0;
   const goalsCompletedThisMonth = popUser
     ? getCompletedGoalsThisMonth(popUser.goals)
     : 0;
+  const goalsCompletedThisYearDataSet = popUser
+    ? getCompletedGoalsThisYear(popUser.goals)
+    : [0];
+  const goalsCreatedThisYearDataSet = popUser
+    ? getCreatedGoalsThisYear(popUser.goals)
+    : [0];
+  console.log(goalsCompletedThisYearDataSet);
   return (
     <div className="flex h-full w-full gap-4 px-10">
       <div className="w-2/3 flex flex-col h-fit gap-4">
         <div className="w-full flex gap-4 h-fit">
-          <div className="w-1/2 bg-[#1976D2] rounded-lg p-4 text-white space-y-4 shadow-xl">
+          <div className="w-1/2 bg-[#1976D2] rounded-lg p-4 text-white space-y-4 shadow-xl ">
             <div className="flex gap-4 items-center ">
               <div>
                 <Image src={"/flag.png"} alt="flag" width={50} height={50} />
@@ -189,12 +242,13 @@ const MainPage = () => {
             <p className="text-sm">Total lessons completed this Month</p>
           </div>
         </div>
-        <div className="w-full">
-          <RecentGoals />
-        </div>
-        <div className="w-full">
-          <h2 className="text-xl"> Goals</h2>
-          <LineChart />
+        <div className="w-full"></div>
+        <div className="w-full ">
+          <LineChart
+            goalsCompletedThisYearDataSet={goalsCompletedThisYearDataSet}
+            goalsCreatedThisYearDataSet={goalsCreatedThisYearDataSet}
+            style={{ paddingBottom: "20px" }}
+          />
         </div>
       </div>
       <div className="w-1/3 h-full flex flex-col gap-4">
