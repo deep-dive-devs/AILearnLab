@@ -180,11 +180,12 @@ const MainPage = () => {
   };
 
   const getCreatedGoalsThisYear = (goals) => {
+    console.log(goals);
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
 
-    const monthlyCounts = new Array(currentMonth).fill(0); 
+    const monthlyCounts = new Array(currentMonth).fill(0);
 
     Object.values(goals).forEach((lessonsArray) => {
       const insights = lessonsArray.insights;
@@ -201,7 +202,39 @@ const MainPage = () => {
 
     return monthlyCounts;
   };
+  const getOverDueGoalsThisYear = (goals) => {
+    console.log(goals);
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth(); // 0-indexed month
+    console.log(currentMonth);
+    let overdueGoalsCount = 0;
 
+    Object.values(goals).forEach((goal) => {
+      const insights = goal.insights;
+      const createdDate = new Date(insights.createdDate);
+      const completedDate = insights.completedDate
+        ? new Date(insights.completedDate)
+        : null;
+
+      // Check if the goal has no completedDate and the createdDate is more than a month old
+      if (!completedDate) {
+        console.log(createdDate);
+        const createdMonth = createdDate.getMonth();
+        const createdYear = createdDate.getFullYear();
+        console.log(createdMonth);
+        // Check if the created date is before the current month of the current year
+        if (
+          createdYear < currentYear ||
+          (createdYear === currentYear && createdMonth < currentMonth)
+        ) {
+          overdueGoalsCount++;
+        }
+      }
+    });
+
+    return overdueGoalsCount;
+  };
 
   const goalsStartedThisMonth = popUser ? getGoalsThisMonth(popUser.goals) : 0;
   const goalsCompletedThisMonth = popUser
@@ -213,6 +246,18 @@ const MainPage = () => {
   const goalsCreatedThisYearDataSet = popUser
     ? getCreatedGoalsThisYear(popUser.goals)
     : [0];
+
+  const totalGoalsCompletedThisYear = goalsCompletedThisYearDataSet.reduce(
+    (acc, num) => acc + num,
+    0
+  );
+  const totalGoalsCreatedThisYear = goalsCreatedThisYearDataSet.reduce(
+    (acc, num) => acc + num,
+    0
+  );
+  const totalGoalsOverDueThisYear = popUser
+    ? getOverDueGoalsThisYear(popUser.goals)
+    : 0;
   console.log(goalsCompletedThisYearDataSet);
   return (
     <div className="flex h-full w-full gap-4 px-10">
@@ -296,7 +341,11 @@ const MainPage = () => {
           </div>
         </div>
         <div className="bg-backgroundSecondary w-full h-full   rounded-xl p-4">
-          <DoughnutChart />
+          <DoughnutChart
+            totalGoalsCompletedThisYear={totalGoalsCompletedThisYear}
+            totalGoalsCreatedThisYear={totalGoalsCreatedThisYear}
+            totalGoalsOverDueThisYear={totalGoalsOverDueThisYear}
+          />
         </div>
       </div>
     </div>

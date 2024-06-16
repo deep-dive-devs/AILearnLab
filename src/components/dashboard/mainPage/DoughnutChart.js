@@ -3,27 +3,47 @@ import { Doughnut } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
-ChartJS.register(ChartDataLabels,ArcElement, Tooltip, Legend);
-const DoughnutChart = () => {
+ChartJS.register(ChartDataLabels, ArcElement, Tooltip, Legend);
+
+const DoughnutChart = ({
+  totalGoalsCompletedThisYear,
+  totalGoalsCreatedThisYear,
+  totalGoalsOverDueThisYear,
+}) => {
+  const allData = [
+    {
+      label: "Goals Completed",
+      value: totalGoalsCompletedThisYear,
+      backgroundColor: "rgb(242,165,152)",
+    },
+    {
+      label: "Goals Created",
+      value: totalGoalsCreatedThisYear,
+      backgroundColor: "rgb(255,232,157)",
+    },
+    {
+      label: "Goals Overdue",
+      value: totalGoalsOverDueThisYear,
+      backgroundColor: "rgb(236,107,109)",
+    },
+  ];
+
+  const filteredData = allData.filter((item) => item.value > 0);
+
   const data = {
-    labels: ["Critical case", "Urgent case", "Errors", "Reviewed", "Success"],
+    labels: filteredData.map((item) => item.label),
     datasets: [
       {
-        data: [30, 30, 5, 15, 20],
-        backgroundColor: [
-          "rgb(242,165,152)",
-          "rgb(255,232,157)",
-          "rgb(236,107,109)",
-          "rgb(122,231,125)",
-          "rgb(195,233,151)",
-        ],
-        display:true,
+        data: filteredData.map((item) => item.value),
+        backgroundColor: filteredData.map((item) => item.backgroundColor),
         hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
       },
     ],
   };
 
-  const Options = {
+  const total = filteredData.reduce((acc, item) => acc + item.value, 0);
+
+  const options = {
     cutoutPercentage: 75,
     legend: {
       display: false,
@@ -32,7 +52,7 @@ const DoughnutChart = () => {
       doughnutlabel: {
         labels: [
           {
-            text: 400,
+            text: total,
             font: {
               size: "40",
             },
@@ -58,11 +78,7 @@ const DoughnutChart = () => {
     },
   };
 
-  return (
-
-      <Doughnut data={data} options={Options} />
- 
-  );
+  return <Doughnut data={data} options={options} />;
 };
 
 export default DoughnutChart;
