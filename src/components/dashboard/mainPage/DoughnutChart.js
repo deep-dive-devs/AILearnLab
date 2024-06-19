@@ -10,23 +10,24 @@ const DoughnutChart = ({
   totalGoalsCreatedThisYear,
   totalGoalsOverDueThisYear,
 }) => {
-  const allData = [
-    {
-      label: "Goals Completed",
-      value: totalGoalsCompletedThisYear,
-      backgroundColor: "rgb(242,165,152)",
-    },
-    {
-      label: "Goals Created",
-      value: totalGoalsCreatedThisYear,
-      backgroundColor: "rgb(255,232,157)",
-    },
-    {
-      label: "Goals Overdue",
-      value: totalGoalsOverDueThisYear,
-      backgroundColor: "rgb(236,107,109)",
-    },
-  ];
+const allData = [
+  {
+    label: "Goals Completed",
+    value: totalGoalsCompletedThisYear,
+    backgroundColor: "rgb(46, 180, 107)", 
+  },
+  {
+    label: "Goals Created",
+    value: totalGoalsCreatedThisYear,
+    backgroundColor: "rgb(26, 55, 129)", 
+  },
+  {
+    label: "Goals Overdue",
+    value: totalGoalsOverDueThisYear,
+    backgroundColor: "rgb(236, 107, 109)", 
+  },
+];
+
 
   const filteredData = allData.filter((item) => item.value > 0);
 
@@ -36,7 +37,7 @@ const DoughnutChart = ({
       {
         data: filteredData.map((item) => item.value),
         backgroundColor: filteredData.map((item) => item.backgroundColor),
-        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        hoverBackgroundColor: ["#2EB46B", " #1A387D", "#D6565A"],
       },
     ],
   };
@@ -44,7 +45,7 @@ const DoughnutChart = ({
   const total = filteredData.reduce((acc, item) => acc + item.value, 0);
 
   const options = {
-    cutoutPercentage: 75,
+    cutoutPercentage: 60,
     legend: {
       display: false,
     },
@@ -71,7 +72,7 @@ const DoughnutChart = ({
       datalabels: {
         color: "black",
         font: {
-          size: 14,
+          size: 16,
           weight: "bold",
         },
       },

@@ -161,7 +161,7 @@ const MainPage = () => {
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
 
-    const monthlyCounts = new Array(currentMonth).fill(0); // Initialize an array with length based on current month
+    const monthlyCounts = new Array(currentMonth).fill(0); 
 
     Object.values(goals).forEach((lessonsArray) => {
       const insights = lessonsArray.insights;
@@ -330,7 +330,7 @@ const MainPage = () => {
                     <IoPersonRemove />
                   </button>
                 </div>
-                <p className="text-green-600">
+                <p className="text-[#2EB46B]">
                   {friend && friend.goals
                     ? Object.keys(friend?.goals).length
                     : 0}{" "}

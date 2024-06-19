@@ -76,7 +76,7 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
   };
 
   return (
-    <div className="flex flex-col p-4 flex-grow bg-slate-400 rounded-md">
+    <div className="flex flex-col p-4 flex-grow bg-backgroundSecondary shadow-2xl rounded-md">
       {showTitleNotification ? (
         <TitleNotification
           isOpen={showTitleNotification}
@@ -84,7 +84,9 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
         />
       ) : (
         <>
-          <div className="text-4xl mx-auto font-extrabold">Create Goal</div>
+          <div className="text-2xl mb-4 mx-auto font-extrabold">
+            Create Goal
+          </div>
           {response && (
             <div className="min-w-3/4 h-4/5 bg-white mb-2 rounded-md flex-grow">
               <div className="flex flex-col grow-0 max-h-4/5">
@@ -101,14 +103,14 @@ const CreateGoal = ({ userId, user, setUserData, setReviewResponse }) => {
             </div>
           )}
           <textarea
-            className="rounded-md mb-4 px-2 pt-2 resize-y"
+            className="rounded-md mb-4 bg-gray-200 border px-2 pt-2 resize-y"
             value={inputTitle}
             onChange={(e) => setInputTitle(e.target.value)}
             placeholder="Give your lesson a title"
             rows="2"
           />
           <textarea
-            className="rounded-md mb-4 px-2 pt-2 resize-y"
+            className="rounded-md mb-4 border bg-gray-200 px-2 pt-2 resize-y"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             placeholder="What would you like to learn about today?"
