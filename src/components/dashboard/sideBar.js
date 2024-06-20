@@ -42,12 +42,7 @@ const SideBar = () => {
       url:  '/goals', 
             
     },
-    {
-      icon: <HiOutlineDesktopComputer />,
-      item: "Practice",
-      url: '/practice', 
-            
-    },
+  
     { icon: <FaUser />, item: "Profile", url: "/profile" },
   ];
 

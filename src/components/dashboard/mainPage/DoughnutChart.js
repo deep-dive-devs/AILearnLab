@@ -3,28 +3,49 @@ import { Doughnut } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
-ChartJS.register(ChartDataLabels,ArcElement, Tooltip, Legend);
-const DoughnutChart = () => {
+ChartJS.register(ChartDataLabels, ArcElement, Tooltip, Legend);
+
+const DoughnutChart = ({
+  totalGoalsCompletedThisYear,
+  totalGoalsCreatedThisYear,
+  totalGoalsOverDueThisYear,
+}) => {
+const allData = [
+  {
+    label: "Goals Completed",
+    value: totalGoalsCompletedThisYear,
+    backgroundColor: "rgb(46, 180, 107)", 
+  },
+  {
+    label: "Goals Created",
+    value: totalGoalsCreatedThisYear,
+    backgroundColor: "rgb(26, 55, 129)", 
+  },
+  {
+    label: "Goals Overdue",
+    value: totalGoalsOverDueThisYear,
+    backgroundColor: "rgb(236, 107, 109)", 
+  },
+];
+
+
+  const filteredData = allData.filter((item) => item.value > 0);
+
   const data = {
-    labels: ["Critical case", "Urgent case", "Errors", "Reviewed", "Success"],
+    labels: filteredData.map((item) => item.label),
     datasets: [
       {
-        data: [30, 30, 5, 15, 20],
-        backgroundColor: [
-          "rgb(242,165,152)",
-          "rgb(255,232,157)",
-          "rgb(236,107,109)",
-          "rgb(122,231,125)",
-          "rgb(195,233,151)",
-        ],
-        display:true,
-        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        data: filteredData.map((item) => item.value),
+        backgroundColor: filteredData.map((item) => item.backgroundColor),
+        hoverBackgroundColor: ["#2EB46B", " #1A387D", "#D6565A"],
       },
     ],
   };
 
-  const Options = {
-    cutoutPercentage: 75,
+  const total = filteredData.reduce((acc, item) => acc + item.value, 0);
+
+  const options = {
+    cutoutPercentage: 60,
     legend: {
       display: false,
     },
@@ -32,7 +53,7 @@ const DoughnutChart = () => {
       doughnutlabel: {
         labels: [
           {
-            text: 400,
+            text: total,
             font: {
               size: "40",
             },
@@ -51,18 +72,14 @@ const DoughnutChart = () => {
       datalabels: {
         color: "black",
         font: {
-          size: 14,
+          size: 16,
           weight: "bold",
         },
       },
     },
   };
 
-  return (
-
-      <Doughnut data={data} options={Options} />
- 
-  );
+  return <Doughnut data={data} options={options} />;
 };
 
 export default DoughnutChart;

@@ -94,7 +94,10 @@ const LoginForm = () => {
           Sign In
         </button>
         <div>
-          Do not have an account? <Link href={"/auth/register"}>Sign up</Link>{" "}
+          Do not have an account?{" "}
+          <Link className="text-red-600" href={"/auth/register"}>
+            Sign up
+          </Link>{" "}
         </div>
       </form>
     </div>
