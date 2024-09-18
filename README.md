@@ -6,19 +6,17 @@ AILearnLab is an innovative educational platform designed to simplify complex le
 
 - **Personalized Learning Paths**: Utilizes the OpenAI API to generate tailored learning steps based on user goals.
 - **Progress Tracking**: Visual charts to track goals and monitor progress over time.
-- **Interactive User Interface**: Designed with Next.js and TypeScript for a responsive and dynamic user experience.
+- **Interactive User Interface**: Designed with Next.js and JavaScript for a responsive and dynamic user experience.
 - **Real-Time Data Management**: Powered by Firebase for real-time updates and seamless user interactions.
 
 ## Technologies Used
 
 - **Next.js**: Framework for server-side rendering and building the frontend.
-- **TypeScript**: Provides type safety and enhances development efficiency.
 - **Node.js**: Handles backend logic and server operations.
 - **Firebase**: Manages real-time data and user authentication.
 - **OpenAI API**: Delivers personalized learning recommendations and pathways.
-- **Jira**: Used for project management and tracking development progress.
 - **Figma**: For UI/UX design and prototyping.
-- **Storybook**: Employed for UI component development and testing.
+
 
 ## Getting Started
 
